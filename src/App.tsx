@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Header from './components/Header';
 import FilterAndSearchArea from './components/FilterAndSearchArea';
 import ProductCard from './components/ProductCard';
@@ -9,28 +9,37 @@ import ItemsPerPageSelector from './components/ItemsPerPageSelector';
 import { useProducts } from './hooks/useProducts';
 import { usePagination } from './hooks/usePagination';
 import { useSorting } from './hooks/useSorting';
+import { useProductFilters } from './hooks/useProductFilters';
+import { useFiltering } from './hooks/useFiltering';
 import { Loader, AlertCircle } from 'lucide-react';
+import { Product } from './types';
 
 function App() {
   const { products, companies, categories, loading, error } = useProducts();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCompany, setSelectedCompany] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [showInStockOnly, setShowInStockOnly] = useState(false);
+  const {
+    searchTerm,
+    setSearchTerm,
+    selectedCompany,
+    setSelectedCompany,
+    selectedCategory,
+    setSelectedCategory,
+    showInStockOnly,
+    setShowInStockOnly,
+    clearFilters,
+    hasActiveFilters
+  } = useProductFilters();
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [itemsPerPage, setItemsPerPage] = useState(12);
 
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.company.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCompany = !selectedCompany || product.company === selectedCompany;
-      const matchesCategory = !selectedCategory || product.category === selectedCategory;
-      const matchesStock = !showInStockOnly || product.stock > 0;
+  const filteredProducts = useFiltering<Product>(products, product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.company.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCompany = !selectedCompany || product.company === selectedCompany;
+    const matchesCategory = !selectedCategory || product.category === selectedCategory;
+    const matchesStock = !showInStockOnly || product.stock > 0;
 
-      return matchesSearch && matchesCompany && matchesCategory && matchesStock;
-    });
-  }, [products, searchTerm, selectedCompany, selectedCategory, showInStockOnly]);
+    return matchesSearch && matchesCompany && matchesCategory && matchesStock;
+  });
 
   const {
     sortedData,
@@ -48,13 +57,6 @@ function App() {
     data: sortedData,
     itemsPerPage
   });
-
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedCompany('');
-    setSelectedCategory('');
-    setShowInStockOnly(false);
-  };
 
   if (loading) {
     return (
@@ -87,7 +89,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
         {/* Search and Filter Section */}
         <div className="mb-8">
@@ -116,7 +118,7 @@ function App() {
                 itemsPerPage={itemsPerPage}
                 onItemsPerPageChange={setItemsPerPage}
               />
-              {(searchTerm || selectedCompany || selectedCategory || showInStockOnly) && (
+              {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
                   className="px-3 py-2 text-xs sm:text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200 whitespace-nowrap"
@@ -140,7 +142,7 @@ function App() {
               </div>
             ) : (
               <div className="mb-8">
-                <ProductTable 
+                <ProductTable
                   products={paginatedData}
                   sortColumn={sortColumn}
                   sortDirection={sortDirection}
@@ -148,7 +150,7 @@ function App() {
                 />
               </div>
             )}
-            
+
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

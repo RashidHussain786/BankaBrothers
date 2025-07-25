@@ -1,4 +1,3 @@
-
 # Gemini Project Conventions
 
 This document outlines the conventions and best practices for the Banka Brother project.
@@ -127,8 +126,3 @@ This project uses the following dependencies:
 
 *   Components and hooks should use PascalCase (e.g., `ProductCard.tsx`, `useProducts.ts`).
 *   Other files should use kebab-case (e.g., `eslint.config.js`).
-
-### Code Formatting
-
-*   The code should be consistently formatted.
-*   While not explicitly configured, it is recommended to use a code formatter like Prettier.

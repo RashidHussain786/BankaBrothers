@@ -2,15 +2,7 @@ import React from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 import { SortableColumn, SortDirection } from '../hooks/useSorting';
 
-interface Product {
-  id: number;
-  name: string;
-  company: string;
-  category: string;
-  unitSize: string;
-  stock: number;
-  image: string;
-}
+import { Product } from '../types';
 
 interface ProductTableProps {
   products: Product[];

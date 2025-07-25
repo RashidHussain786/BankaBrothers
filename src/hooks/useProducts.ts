@@ -1,14 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-
-interface Product {
-  id: number;
-  name: string;
-  company: string;
-  category: string;
-  unitSize: string;
-  stock: number;
-  image: string;
-}
+import { Product } from '../types';
+import { productService } from '../services/productService';
 
 export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -18,11 +10,7 @@ export const useProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/products.json');
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data = await response.json();
+        const data = await productService.getProducts();
         setProducts(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');

@@ -3,15 +3,7 @@ import { useState, useMemo } from 'react';
 export type SortDirection = 'asc' | 'desc' | null;
 export type SortableColumn = 'name' | 'company' | 'category' | 'unitSize' | 'stock' | 'status';
 
-interface Product {
-  id: number;
-  name: string;
-  company: string;
-  category: string;
-  unitSize: string;
-  stock: number;
-  image: string;
-}
+import { Product } from '../types';
 
 interface UseSortingProps {
   data: Product[];
@@ -60,8 +52,8 @@ export const useSorting = ({ data }: UseSortingProps): UseSortingReturn => {
     }
 
     const sorted = [...data].sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
+      let aValue: string | number;
+      let bValue: string | number;
 
       switch (sortColumn) {
         case 'name':
