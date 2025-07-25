@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "name": "Good Day Cashew Cookies",
+    "company": "Britannia",
+    "category": "Biscuits",
+    "unitSize": "200g",
+    "stock": 25,
+    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 2,
+    "name": "Parle-G Gold Biscuits",
+    "company": "Parle",
+    "category": "Biscuits",
+    "unitSize": "1kg",
+    "stock": 8,
+    "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 3,
+    "name": "Lays Classic Salted",
+    "company": "PepsiCo",
+    "category": "Snacks",
+    "unitSize": "50g",
+    "stock": 0,
+    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 4,
+    "name": "Ghari Detergent Powder",
+    "company": "Ghari",
+    "category": "Detergent",
+    "unitSize": "1kg",
+    "stock": 15,
+    "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 5,
+    "name": "Dairy Milk Silk",
+    "company": "Cadbury",
+    "category": "Chocolates",
+    "unitSize": "60g",
+    "stock": 3,
+    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 6,
+    "name": "Marie Gold Biscuits",
+    "company": "Britannia",
+    "category": "Biscuits",
+    "unitSize": "250g",
+    "stock": 18,
+    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 7,
+    "name": "Monaco Salted Biscuits",
+    "company": "Parle",
+    "category": "Biscuits",
+    "unitSize": "200g",
+    "stock": 5,
+    "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 8,
+    "name": "Kurkure Masala Munch",
+    "company": "PepsiCo",
+    "category": "Snacks",
+    "unitSize": "100g",
+    "stock": 12,
+    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 9,
+    "name": "Surf Excel Easy Wash",
+    "company": "Hindustan Unilever",
+    "category": "Detergent",
+    "unitSize": "500g",
+    "stock": 0,
+    "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 10,
+    "name": "Kit Kat Chocolate",
+    "company": "Nestle",
+    "category": "Chocolates",
+    "unitSize": "37.3g",
+    "stock": 22,
+    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 11,
+    "name": "Tiger Glucose Biscuits",
+    "company": "Britannia",
+    "category": "Biscuits",
+    "unitSize": "300g",
+    "stock": 7,
+    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 12,
+    "name": "Hide & Seek Chocolate Chips",
+    "company": "Parle",
+    "category": "Biscuits",
+    "unitSize": "100g",
+    "stock": 14,
+    "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 13,
+    "name": "Cheetos Crunchy",
+    "company": "PepsiCo",
+    "category": "Snacks",
+    "unitSize": "75g",
+    "stock": 1,
+    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 14,
+    "name": "Ariel Complete Detergent",
+    "company": "Procter & Gamble",
+    "category": "Detergent",
+    "unitSize": "1kg",
+    "stock": 9,
+    "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 15,
+    "name": "5 Star Chocolate",
+    "company": "Cadbury",
+    "category": "Chocolates",
+    "unitSize": "45g",
+    "stock": 16,
+    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 16,
+    "name": "Haldiram's Bhujia",
+    "company": "Haldiram's",
+    "category": "Snacks",
+    "unitSize": "200g",
+    "stock": 11,
+    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 17,
+    "name": "Tide Plus Detergent",
+    "company": "Procter & Gamble",
+    "category": "Detergent",
+    "unitSize": "500g",
+    "stock": 4,
+    "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 18,
+    "name": "Oreo Original Cookies",
+    "company": "Mondelez",
+    "category": "Biscuits",
+    "unitSize": "120g",
+    "stock": 19,
+    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 19,
+    "name": "Ferrero Rocher",
+    "company": "Ferrero",
+    "category": "Chocolates",
+    "unitSize": "200g",
+    "stock": 6,
+    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 20,
+    "name": "Uncle Chips Spicy Treat",
+    "company": "Gits",
+    "category": "Snacks",
+    "unitSize": "55g",
+    "stock": 0,
+    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+  }
+]

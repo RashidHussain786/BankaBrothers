@@ -1,0 +1,135 @@
+import React from 'react';
+import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import { SortableColumn, SortDirection } from '../hooks/useSorting';
+
+interface Product {
+  id: number;
+  name: string;
+  company: string;
+  category: string;
+  unitSize: string;
+  stock: number;
+  image: string;
+}
+
+interface ProductTableProps {
+  products: Product[];
+  sortColumn: SortableColumn | null;
+  sortDirection: SortDirection;
+  onSort: (column: SortableColumn) => void;
+}
+
+const ProductTable: React.FC<ProductTableProps> = ({ 
+  products, 
+  sortColumn, 
+  sortDirection, 
+  onSort 
+}) => {
+  const getStockStatus = (stock: number) => {
+    if (stock === 0) {
+      return { text: 'Out of Stock', color: 'text-red-600 bg-red-50' };
+    } else if (stock <= 10) {
+      return { text: 'Low Stock', color: 'text-amber-600 bg-amber-50' };
+    } else {
+      return { text: 'In Stock', color: 'text-green-600 bg-green-50' };
+    }
+  };
+
+  const getSortIcon = (column: SortableColumn) => {
+    if (sortColumn !== column) {
+      return <ChevronsUpDown className="h-4 w-4 text-gray-400" />;
+    }
+    
+    if (sortDirection === 'asc') {
+      return <ChevronUp className="h-4 w-4 text-blue-600" />;
+    } else if (sortDirection === 'desc') {
+      return <ChevronDown className="h-4 w-4 text-blue-600" />;
+    }
+    
+    return <ChevronsUpDown className="h-4 w-4 text-gray-400" />;
+  };
+
+  const SortableHeader: React.FC<{ 
+    column: SortableColumn; 
+    children: React.ReactNode;
+    className?: string;
+  }> = ({ column, children, className = "" }) => (
+    <th 
+      className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-150 select-none ${className}`}
+      onClick={() => onSort(column)}
+    >
+      <div className="flex items-center space-x-1">
+        <span>{children}</span>
+        {getSortIcon(column)}
+      </div>
+    </th>
+  );
+
+  return (
+    <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <SortableHeader column="name">Product</SortableHeader>
+              <SortableHeader column="company">Company</SortableHeader>
+              <SortableHeader column="category">Category</SortableHeader>
+              <SortableHeader column="unitSize">Unit Size</SortableHeader>
+              <SortableHeader column="stock">Stock</SortableHeader>
+              <SortableHeader column="status">Status</SortableHeader>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {products.map((product) => {
+              const stockStatus = getStockStatus(product.stock);
+              return (
+                <tr key={product.id} className="hover:bg-gray-50 transition-colors duration-150">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-12 w-12">
+                        <img
+                          className="h-12 w-12 rounded-lg object-cover"
+                          src={product.image}
+                          alt={product.name}
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900 max-w-xs truncate">
+                          {product.name}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900 font-medium">{product.company}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      {product.category}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900 font-medium">{product.unitSize}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900 font-semibold">
+                      {product.stock > 0 ? `${product.stock} left` : '0'}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${stockStatus.color}`}>
+                      {stockStatus.text}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default ProductTable;
