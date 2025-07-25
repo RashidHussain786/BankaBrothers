@@ -1,23 +1,17 @@
-import { useState, useMemo, useEffect } from 'react';
+import { } from 'react';
 import { UsePaginationProps, UsePaginationReturn } from '../types';
 
-export const usePagination = <T>({
-  data,
-  itemsPerPage
-}: UsePaginationProps<T>): UsePaginationReturn<T> => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return data.slice(startIndex, endIndex);
-  }, [data, currentPage, itemsPerPage]);
+export const usePagination = ({
+  totalItems,
+  itemsPerPage,
+  currentPage,
+  onPageChange
+}: UsePaginationProps): UsePaginationReturn => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const goToPage = (page: number) => {
     const pageNumber = Math.max(1, Math.min(page, totalPages));
-    setCurrentPage(pageNumber);
+    onPageChange(pageNumber);
   };
 
   const nextPage = () => {
@@ -31,15 +25,10 @@ export const usePagination = <T>({
   const canGoNext = currentPage < totalPages;
   const canGoPrev = currentPage > 1;
 
-  // Reset to page 1 when data changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [data.length]);
+  // No internal currentPage state or reset logic needed here
 
   return {
-    currentPage,
     totalPages,
-    paginatedData,
     goToPage,
     nextPage,
     prevPage,

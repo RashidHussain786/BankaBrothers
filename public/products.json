@@ -4,7 +4,9 @@
     "name": "Good Day Cashew Cookies",
     "company": "Britannia",
     "category": "Biscuits",
+    "brand": "Good Day",
     "unitSize": "200g",
+    "size": "Small",
     "stock": 25,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -13,7 +15,9 @@
     "name": "Parle-G Gold Biscuits",
     "company": "Parle",
     "category": "Biscuits",
+    "brand": "Parle-G",
     "unitSize": "1kg",
+    "size": "Large",
     "stock": 8,
     "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -22,7 +26,9 @@
     "name": "Lays Classic Salted",
     "company": "PepsiCo",
     "category": "Snacks",
+    "brand": "Lays",
     "unitSize": "50g",
+    "size": "Small",
     "stock": 0,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -31,7 +37,9 @@
     "name": "Ghari Detergent Powder",
     "company": "Ghari",
     "category": "Detergent",
+    "brand": "Ghari",
     "unitSize": "1kg",
+    "size": "Large",
     "stock": 15,
     "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -40,7 +48,9 @@
     "name": "Dairy Milk Silk",
     "company": "Cadbury",
     "category": "Chocolates",
+    "brand": "Dairy Milk",
     "unitSize": "60g",
+    "size": "Medium",
     "stock": 3,
     "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -49,7 +59,9 @@
     "name": "Marie Gold Biscuits",
     "company": "Britannia",
     "category": "Biscuits",
+    "brand": "Marie Gold",
     "unitSize": "250g",
+    "size": "Medium",
     "stock": 18,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -58,7 +70,9 @@
     "name": "Monaco Salted Biscuits",
     "company": "Parle",
     "category": "Biscuits",
+    "brand": "Monaco",
     "unitSize": "200g",
+    "size": "Small",
     "stock": 5,
     "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -67,7 +81,9 @@
     "name": "Kurkure Masala Munch",
     "company": "PepsiCo",
     "category": "Snacks",
+    "brand": "Kurkure",
     "unitSize": "100g",
+    "size": "Small",
     "stock": 12,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -76,7 +92,9 @@
     "name": "Surf Excel Easy Wash",
     "company": "Hindustan Unilever",
     "category": "Detergent",
+    "brand": "Surf Excel",
     "unitSize": "500g",
+    "size": "Medium",
     "stock": 0,
     "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -85,7 +103,9 @@
     "name": "Kit Kat Chocolate",
     "company": "Nestle",
     "category": "Chocolates",
+    "brand": "Kit Kat",
     "unitSize": "37.3g",
+    "size": "Small",
     "stock": 22,
     "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -94,7 +114,9 @@
     "name": "Tiger Glucose Biscuits",
     "company": "Britannia",
     "category": "Biscuits",
+    "brand": "Tiger",
     "unitSize": "300g",
+    "size": "Medium",
     "stock": 7,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -103,7 +125,9 @@
     "name": "Hide & Seek Chocolate Chips",
     "company": "Parle",
     "category": "Biscuits",
+    "brand": "Hide & Seek",
     "unitSize": "100g",
+    "size": "Small",
     "stock": 14,
     "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -112,7 +136,9 @@
     "name": "Cheetos Crunchy",
     "company": "PepsiCo",
     "category": "Snacks",
+    "brand": "Cheetos",
     "unitSize": "75g",
+    "size": "Small",
     "stock": 1,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -121,7 +147,9 @@
     "name": "Ariel Complete Detergent",
     "company": "Procter & Gamble",
     "category": "Detergent",
+    "brand": "Ariel",
     "unitSize": "1kg",
+    "size": "Large",
     "stock": 9,
     "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -130,7 +158,9 @@
     "name": "5 Star Chocolate",
     "company": "Cadbury",
     "category": "Chocolates",
+    "brand": "5 Star",
     "unitSize": "45g",
+    "size": "Small",
     "stock": 16,
     "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -139,7 +169,9 @@
     "name": "Haldiram's Bhujia",
     "company": "Haldiram's",
     "category": "Snacks",
+    "brand": "Bhujia",
     "unitSize": "200g",
+    "size": "Medium",
     "stock": 11,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -148,7 +180,9 @@
     "name": "Tide Plus Detergent",
     "company": "Procter & Gamble",
     "category": "Detergent",
+    "brand": "Tide",
     "unitSize": "500g",
+    "size": "Medium",
     "stock": 4,
     "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -157,7 +191,9 @@
     "name": "Oreo Original Cookies",
     "company": "Mondelez",
     "category": "Biscuits",
+    "brand": "Oreo",
     "unitSize": "120g",
+    "size": "Small",
     "stock": 19,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -166,7 +202,9 @@
     "name": "Ferrero Rocher",
     "company": "Ferrero",
     "category": "Chocolates",
+    "brand": "Ferrero Rocher",
     "unitSize": "200g",
+    "size": "Medium",
     "stock": 6,
     "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
@@ -175,7 +213,9 @@
     "name": "Uncle Chips Spicy Treat",
     "company": "Gits",
     "category": "Snacks",
+    "brand": "Uncle Chips",
     "unitSize": "55g",
+    "size": "Small",
     "stock": 0,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   }

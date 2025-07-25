@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Header from './components/Header';
 import FilterAndSearchArea from './components/FilterAndSearchArea';
 import ProductCard from './components/ProductCard';
@@ -10,12 +10,9 @@ import { useProducts } from './hooks/useProducts';
 import { usePagination } from './hooks/usePagination';
 import { useSorting } from './hooks/useSorting';
 import { useProductFilters } from './hooks/useProductFilters';
-import { useFiltering } from './hooks/useFiltering';
 import { Loader, AlertCircle } from 'lucide-react';
-import { Product } from './types';
 
 function App() {
-  const { products, companies, categories, loading, error } = useProducts();
   const {
     searchTerm,
     setSearchTerm,
@@ -23,6 +20,10 @@ function App() {
     setSelectedCompany,
     selectedCategory,
     setSelectedCategory,
+    selectedBrand,
+    setSelectedBrand,
+    selectedSize,
+    setSelectedSize,
     showInStockOnly,
     setShowInStockOnly,
     clearFilters,
@@ -30,32 +31,36 @@ function App() {
   } = useProductFilters();
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [itemsPerPage, setItemsPerPage] = useState(12);
-
-  const filteredProducts = useFiltering<Product>(products, product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.company.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCompany = !selectedCompany || product.company === selectedCompany;
-    const matchesCategory = !selectedCategory || product.category === selectedCategory;
-    const matchesStock = !showInStockOnly || product.stock > 0;
-
-    return matchesSearch && matchesCompany && matchesCategory && matchesStock;
-  });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
-    sortedData,
     sortColumn,
     sortDirection,
     handleSort
-  } = useSorting({ data: filteredProducts });
+  } = useSorting();
+
+  const productQueryParams = useMemo(() => ({
+    search: searchTerm,
+    company: selectedCompany,
+    category: selectedCategory,
+    brand: selectedBrand,
+    size: selectedSize,
+    inStockOnly: showInStockOnly,
+    sortColumn,
+    sortDirection,
+    page: currentPage,
+    limit: itemsPerPage,
+  }), [searchTerm, selectedCompany, selectedCategory, selectedBrand, selectedSize, showInStockOnly, sortColumn, sortDirection, currentPage, itemsPerPage]);
+
+  const { products, totalCount, companies, categories, brands, sizes, loading, error } = useProducts(productQueryParams);
 
   const {
-    currentPage,
-    totalPages,
-    paginatedData,
     goToPage
   } = usePagination({
-    data: sortedData,
-    itemsPerPage
+    totalItems: totalCount,
+    itemsPerPage,
+    currentPage,
+    onPageChange: setCurrentPage
   });
 
   if (loading) {
@@ -98,11 +103,17 @@ function App() {
             onSearchChange={setSearchTerm}
             companies={companies}
             categories={categories}
+            brands={brands}
+            sizes={sizes}
             selectedCompany={selectedCompany}
             selectedCategory={selectedCategory}
+            selectedBrand={selectedBrand}
+            selectedSize={selectedSize}
             showInStockOnly={showInStockOnly}
             onCompanyChange={setSelectedCompany}
             onCategoryChange={setSelectedCategory}
+            onBrandChange={setSelectedBrand}
+            onSizeChange={setSelectedSize}
             onToggleInStockOnly={setShowInStockOnly}
           />
         </div>
@@ -111,7 +122,7 @@ function App() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4">
             <h2 className="text-xl font-semibold text-gray-900">
-              Products ({filteredProducts.length})
+              Products ({totalCount})
             </h2>
             <div className="flex flex-row items-center space-x-2 sm:space-x-4">
               <ItemsPerPageSelector
@@ -132,18 +143,18 @@ function App() {
         </div>
 
         {/* Products Grid */}
-        {paginatedData.length > 0 ? (
+        {products.length > 0 ? (
           <>
             {viewMode === 'grid' ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-                {paginatedData.map(product => (
+                {products.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
               <div className="mb-8">
                 <ProductTable
-                  products={paginatedData}
+                  products={products}
                   sortColumn={sortColumn}
                   sortDirection={sortDirection}
                   onSort={handleSort}
@@ -153,9 +164,9 @@ function App() {
 
             <Pagination
               currentPage={currentPage}
-              totalPages={totalPages}
+              totalPages={Math.ceil(totalCount / itemsPerPage)}
               onPageChange={goToPage}
-              totalItems={sortedData.length}
+              totalItems={totalCount}
               itemsPerPage={itemsPerPage}
             />
           </>

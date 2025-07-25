@@ -1,3 +1,5 @@
+import { SortableColumn, SortDirection } from './sorting';
+
 export interface Product {
   id: number;
   name: string;
@@ -6,4 +8,28 @@ export interface Product {
   unitSize: string;
   stock: number;
   image: string;
+  brand: string;
+  size: string;
+}
+
+export interface ProductQueryParams {
+  search?: string;
+  company?: string;
+  category?: string;
+  brand?: string;
+  size?: string;
+  inStockOnly?: boolean;
+  sortColumn?: SortableColumn | null;
+  sortDirection?: SortDirection;
+  page?: number;
+  limit?: number;
+}
+
+export interface ProductServiceResponse {
+  data: Product[];
+  totalCount: number;
+  companies: string[];
+  categories: string[];
+  brands: string[];
+  sizes: string[];
 }

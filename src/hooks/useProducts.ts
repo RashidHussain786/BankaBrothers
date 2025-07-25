@@ -1,17 +1,29 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Product } from '../types';
+import { useState, useEffect } from 'react';
+import { Product, ProductQueryParams } from '../types';
 import { productService } from '../services/productService';
 
-export const useProducts = () => {
+export const useProducts = (params: ProductQueryParams) => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [companies, setCompanies] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
+  const [sizes, setSizes] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const data = await productService.getProducts();
-        setProducts(data);
+        const result = await productService.getProducts(params);
+        setProducts(result.data);
+        setTotalCount(result.totalCount);
+        setCompanies(result.companies);
+        setCategories(result.categories);
+        setBrands(result.brands);
+        setSizes(result.sizes);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
@@ -20,15 +32,7 @@ export const useProducts = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [params]);
 
-  const companies = useMemo(() => {
-    return Array.from(new Set(products.map(product => product.company))).sort();
-  }, [products]);
-
-  const categories = useMemo(() => {
-    return Array.from(new Set(products.map(product => product.category))).sort();
-  }, [products]);
-
-  return { products, companies, categories, loading, error };
+  return { products, totalCount, companies, categories, brands, sizes, loading, error };
 };

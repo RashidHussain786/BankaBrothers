@@ -6,11 +6,17 @@ interface FilterAndSearchAreaProps {
   onSearchChange: (term: string) => void;
   companies: string[];
   categories: string[];
+  brands: string[];
+  sizes: string[];
   selectedCompany: string;
   selectedCategory: string;
+  selectedBrand: string;
+  selectedSize: string;
   showInStockOnly: boolean;
   onCompanyChange: (company: string) => void;
   onCategoryChange: (category: string) => void;
+  onBrandChange: (brand: string) => void;
+  onSizeChange: (size: string) => void;
   onToggleInStockOnly: (showOnly: boolean) => void;
 }
 
@@ -19,11 +25,17 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
   onSearchChange,
   companies,
   categories,
+  brands,
+  sizes,
   selectedCompany,
   selectedCategory,
+  selectedBrand,
+  selectedSize,
   showInStockOnly,
   onCompanyChange,
   onCategoryChange,
+  onBrandChange,
+  onSizeChange,
   onToggleInStockOnly
 }) => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -38,7 +50,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
       <div className="hidden md:block">
         <div className="grid grid-cols-12 gap-4 items-end">
           {/* Search Field */}
-          <div className="col-span-4">
+          <div className="col-span-3">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Search Products
             </label>
@@ -57,7 +69,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
           </div>
 
           {/* Company Filter */}
-          <div className="col-span-3">
+          <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Company
             </label>
@@ -79,7 +91,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
           </div>
 
           {/* Category Filter */}
-          <div className="col-span-3">
+          <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Category
             </label>
@@ -93,6 +105,50 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                 {categories.map((category) => (
                   <option key={category} value={category}>
                     {category}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Brand Filter */}
+          <div className="col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Brand
+            </label>
+            <div className="relative">
+              <select
+                value={selectedBrand}
+                onChange={(e) => onBrandChange(e.target.value)}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+              >
+                <option value="">All Brands</option>
+                {brands.map((brand) => (
+                  <option key={brand} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Size Filter */}
+          <div className="col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Size
+            </label>
+            <div className="relative">
+              <select
+                value={selectedSize}
+                onChange={(e) => onSizeChange(e.target.value)}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+              >
+                <option value="">All Sizes</option>
+                {sizes.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
                   </option>
                 ))}
               </select>
@@ -202,6 +258,50 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                   {categories.map((category) => (
                     <option key={category} value={category}>
                       {category}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Brand Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Brand
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedBrand}
+                  onChange={(e) => onBrandChange(e.target.value)}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+                >
+                  <option value="">All Brands</option>
+                  {brands.map((brand) => (
+                    <option key={brand} value={brand}>
+                      {brand}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Size Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Size
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedSize}
+                  onChange={(e) => onSizeChange(e.target.value)}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+                >
+                  <option value="">All Sizes</option>
+                  {sizes.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
                     </option>
                   ))}
                 </select>

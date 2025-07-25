@@ -1,89 +1,34 @@
-import { useState, useMemo } from 'react';
-import { SortDirection, SortableColumn, UseSortingReturn, Product } from '../types';
+import { useState, useEffect } from 'react';
+import { SortDirection, SortableColumn, UseSortingReturn } from '../types';
 
-interface UseSortingProps {
-  data: Product[];
-}
-
-export const useSorting = ({ data }: UseSortingProps): UseSortingReturn => {
-  const [sortColumn, setSortColumn] = useState<SortableColumn | null>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
-
-  const getStockStatus = (stock: number): number => {
-    if (stock === 0) return 0; // Out of Stock
-    if (stock <= 10) return 1; // Low Stock
-    return 2; // In Stock
+export const useSorting = (): UseSortingReturn => {
+  const getInitialSortColumn = (): SortableColumn | null => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('sort') as SortableColumn | null;
   };
 
-  const parseUnitSize = (unitSize: string): number => {
-    // Extract number from unit size (e.g., "200g" -> 200, "1kg" -> 1000)
-    const match = unitSize.match(/^(\d+(?:\.\d+)?)(.*)/);
-    if (!match) return 0;
-
-    const value = parseFloat(match[1]);
-    const unit = match[2].toLowerCase();
-
-    // Convert to grams for consistent comparison
-    switch (unit) {
-      case 'kg':
-        return value * 1000;
-      case 'g':
-      case '':
-        return value;
-      default:
-        return value;
-    }
+  const getInitialSortDirection = (): SortDirection => {
+    const params = new URLSearchParams(window.location.search);
+    return (params.get('direction') as SortDirection) || null;
   };
 
-  const sortedData = useMemo(() => {
-    if (!sortColumn || !sortDirection) {
-      return data;
+  const [sortColumn, setSortColumn] = useState<SortableColumn | null>(getInitialSortColumn);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(getInitialSortDirection);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (sortColumn) {
+      params.set('sort', sortColumn);
+    } else {
+      params.delete('sort');
     }
-
-    const sorted = [...data].sort((a, b) => {
-      let aValue: string | number;
-      let bValue: string | number;
-
-      switch (sortColumn) {
-        case 'name':
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-          break;
-        case 'company':
-          aValue = a.company.toLowerCase();
-          bValue = b.company.toLowerCase();
-          break;
-        case 'category':
-          aValue = a.category.toLowerCase();
-          bValue = b.category.toLowerCase();
-          break;
-        case 'unitSize':
-          aValue = parseUnitSize(a.unitSize);
-          bValue = parseUnitSize(b.unitSize);
-          break;
-        case 'stock':
-          aValue = a.stock;
-          bValue = b.stock;
-          break;
-        case 'status':
-          aValue = getStockStatus(a.stock);
-          bValue = getStockStatus(b.stock);
-          break;
-        default:
-          return 0;
-      }
-
-      if (aValue < bValue) {
-        return sortDirection === 'asc' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortDirection === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-
-    return sorted;
-  }, [data, sortColumn, sortDirection]);
+    if (sortDirection) {
+      params.set('direction', sortDirection);
+    } else {
+      params.delete('direction');
+    }
+    window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+  }, [sortColumn, sortDirection]);
 
   const handleSort = (column: SortableColumn) => {
     if (sortColumn === column) {
@@ -102,7 +47,6 @@ export const useSorting = ({ data }: UseSortingProps): UseSortingReturn => {
   };
 
   return {
-    sortedData,
     sortColumn,
     sortDirection,
     handleSort

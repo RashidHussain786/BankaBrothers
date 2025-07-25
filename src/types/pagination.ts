@@ -1,13 +1,11 @@
-export interface UsePaginationProps<T> {
-  data: T[];
+export interface UsePaginationProps {
+  totalItems: number;
   itemsPerPage: number;
+  currentPage: number;
 }
 
-export interface UsePaginationReturn<T> {
-  currentPage: number;
+export interface UsePaginationReturn {
   totalPages: number;
-  paginatedData: T[];
-  goToPage: (page: number) => void;
   nextPage: () => void;
   prevPage: () => void;
   canGoNext: boolean;
