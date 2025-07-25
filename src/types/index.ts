@@ -1,9 +1,3 @@
-export interface Product {
-  id: number;
-  name: string;
-  company: string;
-  category: string;
-  unitSize: string;
-  stock: number;
-  image: string;
-}
+export * from './product';
+export * from './pagination';
+export * from './sorting';

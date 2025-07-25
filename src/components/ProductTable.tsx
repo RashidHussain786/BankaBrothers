@@ -1,8 +1,6 @@
 import React from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
-import { SortableColumn, SortDirection } from '../hooks/useSorting';
-
-import { Product } from '../types';
+import { SortableColumn, SortDirection, Product } from '../types';
 
 interface ProductTableProps {
   products: Product[];

@@ -1,19 +1,8 @@
 import { useState, useMemo } from 'react';
-
-export type SortDirection = 'asc' | 'desc' | null;
-export type SortableColumn = 'name' | 'company' | 'category' | 'unitSize' | 'stock' | 'status';
-
-import { Product } from '../types';
+import { SortDirection, SortableColumn, UseSortingReturn, Product } from '../types';
 
 interface UseSortingProps {
   data: Product[];
-}
-
-interface UseSortingReturn {
-  sortedData: Product[];
-  sortColumn: SortableColumn | null;
-  sortDirection: SortDirection;
-  handleSort: (column: SortableColumn) => void;
 }
 
 export const useSorting = ({ data }: UseSortingProps): UseSortingReturn => {
@@ -30,10 +19,10 @@ export const useSorting = ({ data }: UseSortingProps): UseSortingReturn => {
     // Extract number from unit size (e.g., "200g" -> 200, "1kg" -> 1000)
     const match = unitSize.match(/^(\d+(?:\.\d+)?)(.*)/);
     if (!match) return 0;
-    
+
     const value = parseFloat(match[1]);
     const unit = match[2].toLowerCase();
-    
+
     // Convert to grams for consistent comparison
     switch (unit) {
       case 'kg':

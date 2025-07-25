@@ -1,20 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-
-interface UsePaginationProps<T> {
-  data: T[];
-  itemsPerPage: number;
-}
-
-interface UsePaginationReturn<T> {
-  currentPage: number;
-  totalPages: number;
-  paginatedData: T[];
-  goToPage: (page: number) => void;
-  nextPage: () => void;
-  prevPage: () => void;
-  canGoNext: boolean;
-  canGoPrev: boolean;
-}
+import { UsePaginationProps, UsePaginationReturn } from '../types';
 
 export const usePagination = <T>({
   data,
