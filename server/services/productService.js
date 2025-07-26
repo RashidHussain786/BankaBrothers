@@ -99,6 +99,10 @@ exports.findProducts = (params) => {
           aValue = a.stockQuantity;
           bValue = b.stockQuantity;
           break;
+        case 'status':
+          aValue = getStockStatus(a.stockQuantity);
+          bValue = getStockStatus(b.stockQuantity);
+          break;
         default:
           return 0;
       }
