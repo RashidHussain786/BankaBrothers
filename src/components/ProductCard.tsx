@@ -4,9 +4,10 @@ import { Product } from '../types';
 
 interface ProductCardProps {
   product: Product;
+  onOrderClick: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onOrderClick }) => {
   const getStockStatus = (stock: number) => {
     if (stock === 0) {
       return { text: 'Out of Stock', color: 'text-red-600 bg-red-50 border-red-200' };
@@ -49,6 +50,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${stockStatus.color}`}>
             {stockStatus.text}
           </span>
+          <button
+            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200"
+            onClick={() => onOrderClick(product)}
+          >
+            Order
+          </button>
         </div>
       </div>
     </div>

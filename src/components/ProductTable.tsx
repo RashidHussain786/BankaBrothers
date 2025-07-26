@@ -7,13 +7,15 @@ interface ProductTableProps {
   sortColumn: SortableColumn | null;
   sortDirection: SortDirection;
   onSort: (column: SortableColumn) => void;
+  onOrderClick: (product: Product) => void;
 }
 
-const ProductTable: React.FC<ProductTableProps> = ({ 
-  products, 
-  sortColumn, 
-  sortDirection, 
-  onSort 
+const ProductTable: React.FC<ProductTableProps> = ({
+  products,
+  sortColumn,
+  sortDirection,
+  onSort,
+  onOrderClick
 }) => {
   const getStockStatus = (stock: number) => {
     if (stock === 0) {
@@ -106,6 +108,14 @@ const ProductTable: React.FC<ProductTableProps> = ({
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${stockStatus.color}`}>
                     {stockStatus.text}
                   </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button
+                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200"
+                    onClick={() => onOrderClick(product)}
+                  >
+                    Order
+                  </button>
                 </td>
                 </tr>
               );
