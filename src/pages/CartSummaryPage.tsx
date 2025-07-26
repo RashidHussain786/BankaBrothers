@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useCart } from '../hooks/useCart';
 import { Link } from 'react-router-dom';
 import { Trash2, PlusCircle, MinusCircle, ShoppingCart } from 'lucide-react';
+import { orderService } from '../services/orderService';
+import { OrderData } from '../types';
 const CartSummaryPage: React.FC = () => {
   const { cartItems, removeFromCart, updateCartItemQuantity, totalItemsInCart, clearCart } = useCart();
 
@@ -50,7 +52,7 @@ const CartSummaryPage: React.FC = () => {
     updateCartItemQuantity(productId, newQuantity, note, itemsPerPack);
   };
 
-  
+
 
   const handlePlaceOrder = async () => {
     if (cartItems.length === 0) {
@@ -59,7 +61,7 @@ const CartSummaryPage: React.FC = () => {
     }
 
     if (validateForm()) {
-      const orderData = {
+      const orderData: OrderData = {
         customerInfo: {
           name: customerName,
           mobile: mobileNumber,
@@ -78,25 +80,13 @@ const CartSummaryPage: React.FC = () => {
       };
 
       try {
-        const response = await fetch('http://localhost:3001/api/order', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderData),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Order submission failed: ${response.statusText}`);
-        }
-
-        const result = await response.json();
+        const result = await orderService.submitOrder(orderData);
         setOrderId(result.orderId);
         setOrderPlaced(true);
         clearCart();
       } catch (error) {
         console.error('Error placing order:', error);
-        alert(`Failed to place order: ${error.message}`);
+        alert(`Failed to place order: ${error}`);
       }
     }
   };

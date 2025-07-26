@@ -3,6 +3,8 @@ const cors = require('cors');
 
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 const PORT = 3001;
@@ -13,6 +15,8 @@ app.use(express.json());
 // Use API routes
 app.use('/api/products', productRoutes);
 app.use('/api/order', orderRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   res.send('Banka Brother Backend is running!');

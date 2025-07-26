@@ -1,7 +1,15 @@
 import Header from './components/Header';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import CartSummaryPage from './pages/CartSummaryPage';
 import ProductListingPage from './pages/ProductListingPage';
+import LoginPage from './pages/LoginPage';
+import AdminCreateUserPage from './pages/AdminCreateUserPage';
+import { useAuth } from './context/AuthContext';
+
+const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+};
 
 function App() {
   return (
@@ -9,8 +17,10 @@ function App() {
       <Header />
 
       <Routes>
-        <Route path="/" element={<ProductListingPage />} />
-        <Route path="/cart" element={<CartSummaryPage />} />
+        <Route path="/" element={<PrivateRoute><ProductListingPage /></PrivateRoute>} />
+        <Route path="/cart" element={<PrivateRoute><CartSummaryPage /></PrivateRoute>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin/create-user" element={<PrivateRoute><AdminCreateUserPage /></PrivateRoute>} />
       </Routes>
 
       {/* Footer */}

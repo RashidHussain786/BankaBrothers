@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 import { SortableColumn, SortDirection, Product } from '../types';
+import { useAuth } from '../context/AuthContext';
 
 interface ProductTableProps {
   products: Product[];
@@ -17,6 +18,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   onSort,
   onOrderClick
 }) => {
+  const { isAdmin } = useAuth();
   const getStockStatus = (stockQuantity: number) => {
     if (stockQuantity === 0) {
       return { text: 'Out of Stock', color: 'text-red-600 bg-red-50' };
@@ -31,22 +33,22 @@ const ProductTable: React.FC<ProductTableProps> = ({
     if (sortColumn !== column) {
       return <ChevronsUpDown className="h-4 w-4 text-gray-400" />;
     }
-    
+
     if (sortDirection === 'asc') {
       return <ChevronUp className="h-4 w-4 text-blue-600" />;
     } else if (sortDirection === 'desc') {
       return <ChevronDown className="h-4 w-4 text-blue-600" />;
     }
-    
+
     return <ChevronsUpDown className="h-4 w-4 text-gray-400" />;
   };
 
-  const SortableHeader: React.FC<{ 
-    column: SortableColumn; 
+  const SortableHeader: React.FC<{
+    column: SortableColumn;
     children: React.ReactNode;
     className?: string;
   }> = ({ column, children, className = "" }) => (
-    <th 
+    <th
       className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-150 select-none ${className}`}
       onClick={() => onSort(column)}
     >
@@ -67,9 +69,11 @@ const ProductTable: React.FC<ProductTableProps> = ({
               <SortableHeader column="company">Company</SortableHeader>
               <SortableHeader column="category">Category</SortableHeader>
               <SortableHeader column="unitSize">Unit Size</SortableHeader>
-              
+
               <SortableHeader column="status">Status</SortableHeader>
-              <th></th> {/* Empty header for the Order button column */}
+              <SortableHeader column="status" className="text-left">
+                {isAdmin ? 'Stock Quantity' : 'Action'}
+              </SortableHeader>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -106,19 +110,28 @@ const ProductTable: React.FC<ProductTableProps> = ({
                     <div className="text-sm text-gray-900 font-medium">{product.unitSize}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${stockStatus.color}`}>
-                    {stockStatus.text}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button
-                    className={`px-4 py-2 text-white text-sm font-medium rounded-md transition-colors duration-200 ${product.isAvailable ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
-                    onClick={() => onOrderClick(product)}
-                    disabled={!product.isAvailable}
-                  >
-                    {product.isAvailable ? 'Order' : 'Out of Stock'}
-                  </button>
-                </td>
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${stockStatus.color}`}>
+                      {stockStatus.text}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      {isAdmin ? (
+                        <span className="text-sm text-gray-900 font-medium">
+                          {product.stockQuantity} units
+                        </span>
+                      ) : (
+                        <button
+                          className={`px-4 py-2 text-white text-sm font-medium rounded-md transition-colors duration-200 ${product.stockQuantity > 0 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
+                            }`}
+                          onClick={() => onOrderClick(product)}
+                          disabled={product.stockQuantity === 0}
+                        >
+                          {product.stockQuantity > 0 ? 'Order' : 'Out of Stock'}
+                        </button>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               );
             })}
