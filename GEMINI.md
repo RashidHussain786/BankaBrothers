@@ -28,13 +28,16 @@ This document outlines the conventions and best practices for the Banka Brother 
 ├───dist/
 ├───node_modules/
 ├───public/
-│   └───products.json
+│   ├───products.json
+│   └───store-icon.svg
 └───src/
     ├───App.tsx
     ├───index.css
     ├───main.tsx
     ├───vite-env.d.ts
     ├───components/
+    │   ├───AddToCartModal.tsx
+    │   ├───CartIcon.tsx
     │   ├───FilterAndSearchArea.tsx
     │   ├───Header.tsx
     │   ├───ItemsPerPageSelector.tsx
@@ -42,10 +45,23 @@ This document outlines the conventions and best practices for the Banka Brother 
     │   ├───ProductCard.tsx
     │   ├───ProductTable.tsx
     │   └───ViewToggle.tsx
-    └───hooks/
-        ├───usePagination.ts
-        ├───useProducts.ts
-        └───useSorting.ts
+    ├───hooks/
+    │   ├───useCart.ts
+    │   ├───useFiltering.ts
+    │   ├───usePagination.ts
+    │   ├───useProductFilters.ts
+    │   ├───useProducts.ts
+    │   └───useSorting.ts
+    ├───pages/
+    │   └───CartSummaryPage.tsx
+    ├───services/
+    │   └───productService.ts
+    └───types/
+        ├───cart.ts
+        ├───index.ts
+        ├───pagination.ts
+        ├───product.ts
+        └───sorting.ts
 ```
 
 ## Development
@@ -81,6 +97,7 @@ This project uses the following dependencies:
 *   `lucide-react`: ^0.344.0
 *   `react`: ^18.3.1
 *   `react-dom`: ^18.3.1
+*   `react-router-dom`: ^7.7.1
 
 ### Development Dependencies
 
