@@ -218,5 +218,115 @@
     "size": "Small",
     "stockQuantity": 0,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 21,
+    "name": "Perk Chocolate",
+    "company": "Cadbury",
+    "category": "Chocolates",
+    "brand": "Perk",
+    "unitSize": "30g",
+    "size": "Small",
+    "stockQuantity": 20,
+    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 22,
+    "name": "Tata Tea Premium",
+    "company": "Tata",
+    "category": "Beverages",
+    "brand": "Tata Tea",
+    "unitSize": "500g",
+    "size": "Medium",
+    "stockQuantity": 10,
+    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 23,
+    "name": "Boost Health Drink",
+    "company": "GSK",
+    "category": "Beverages",
+    "brand": "Boost",
+    "unitSize": "500g",
+    "size": "Medium",
+    "stockQuantity": 7,
+    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 24,
+    "name": "Pepsi Soft Drink",
+    "company": "PepsiCo",
+    "category": "Beverages",
+    "brand": "Pepsi",
+    "unitSize": "1.25L",
+    "size": "Large",
+    "stockQuantity": 13,
+    "image": "https://images.pexels.com/photos/161888/soda-soft-drink-refreshment-cold-161888.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 25,
+    "name": "Nescafe Classic Coffee",
+    "company": "Nestle",
+    "category": "Beverages",
+    "brand": "Nescafe",
+    "unitSize": "100g",
+    "size": "Small",
+    "stockQuantity": 6,
+    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 26,
+    "name": "Bournvita Health Drink",
+    "company": "Cadbury",
+    "category": "Beverages",
+    "brand": "Bournvita",
+    "unitSize": "500g",
+    "size": "Medium",
+    "stockQuantity": 5,
+    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 27,
+    "name": "Sunfeast Dark Fantasy",
+    "company": "ITC",
+    "category": "Biscuits",
+    "brand": "Sunfeast",
+    "unitSize": "75g",
+    "size": "Small",
+    "stockQuantity": 9,
+    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 28,
+    "name": "Nestle Milkmaid",
+    "company": "Nestle",
+    "category": "Dairy",
+    "brand": "Milkmaid",
+    "unitSize": "400g",
+    "size": "Medium",
+    "stockQuantity": 4,
+    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 29,
+    "name": "Amul Butter",
+    "company": "Amul",
+    "category": "Dairy",
+    "brand": "Amul",
+    "unitSize": "500g",
+    "size": "Medium",
+    "stockQuantity": 12,
+    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+  },
+  {
+    "id": 30,
+    "name": "Maggi 2-Minute Noodles",
+    "company": "Nestle",
+    "category": "Instant Food",
+    "brand": "Maggi",
+    "unitSize": "70g",
+    "size": "Small",
+    "stockQuantity": 30,
+    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
   }
 ]

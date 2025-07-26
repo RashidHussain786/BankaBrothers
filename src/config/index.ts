@@ -10,3 +10,15 @@ const config = {
 } as const;
 
 export const API_BASE_URL = config[ENV as keyof typeof config].API_BASE_URL;
+
+export const REQUIRED_FIELDS = [
+    'id',
+    'name',
+    'company',
+    'category',
+    'brand',
+    'unitSize',
+    'size',
+    'stockQuantity',
+    'image',
+];

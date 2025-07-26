@@ -19,4 +19,21 @@ export const adminService = {
 
         return response.json();
     },
+
+    importProducts: async (file: File, token: string): Promise<string> => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await fetch(`${API_BASE_URL}/admin/products/import`, {
+            method: 'POST',
+            headers: {
+                'x-auth-token': token,
+            },
+            body: formData,
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Import failed');
+        }
+        return 'Products imported successfully!';
+    },
 };
