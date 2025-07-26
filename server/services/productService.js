@@ -1,8 +1,21 @@
 const fs = require('fs');
 const path = require('path');
+const csv = require('csv-parser');
 
 const productsFilePath = path.join(__dirname, '..', 'data', 'products.json');
 let products = [];
+
+const REQUIRED_FIELDS = [
+  'id',
+  'name',
+  'company',
+  'category',
+  'brand',
+  'unitSize',
+  'size',
+  'stockQuantity',
+  'image',
+];
 
 // Load products data
 try {
@@ -34,6 +47,45 @@ const parseUnitSize = (unitSize) => {
     default:
       return value;
   }
+};
+
+exports.importProductsFromCSV = (filePath) => {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    let error = null;
+
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on('data', (data) => {
+        // Validate required fields
+        const missingFields = REQUIRED_FIELDS.filter(field => !(field in data));
+        if (missingFields.length > 0) {
+          error = `Missing required fields: ${missingFields.join(', ')}. CSV columns found: ${Object.keys(data).join(', ')}`;
+          return;
+        }
+        // Convert types
+        const processedData = {
+          ...data,
+          id: parseInt(data.id),
+          stockQuantity: parseInt(data.stockQuantity)
+        };
+        results.push(processedData);
+      })
+      .on('end', () => {
+        if (error) {
+          reject(new Error(error));
+          return;
+        }
+        // Overwrite products.json
+        fs.writeFileSync(productsFilePath, JSON.stringify(results, null, 2));
+        // Update in-memory products
+        products = results;
+        resolve('Products imported successfully.');
+      })
+      .on('error', (err) => {
+        reject(new Error('Failed to process CSV file.'));
+      });
+  });
 };
 
 exports.findProducts = (params) => {
