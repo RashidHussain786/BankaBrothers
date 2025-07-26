@@ -65,7 +65,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
               <SortableHeader column="company">Company</SortableHeader>
               <SortableHeader column="category">Category</SortableHeader>
               <SortableHeader column="unitSize">Unit Size</SortableHeader>
-              <SortableHeader column="stock">Stock</SortableHeader>
+              
               <SortableHeader column="status">Status</SortableHeader>
             </tr>
           </thead>
@@ -102,16 +102,11 @@ const ProductTable: React.FC<ProductTableProps> = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900 font-medium">{product.unitSize}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 font-semibold">
-                      {product.stock > 0 ? `${product.stock} left` : '0'}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${stockStatus.color}`}>
-                      {stockStatus.text}
-                    </span>
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${stockStatus.color}`}>
+                    {stockStatus.text}
+                  </span>
+                </td>
                 </tr>
               );
             })}

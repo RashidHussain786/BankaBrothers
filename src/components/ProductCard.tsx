@@ -49,11 +49,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${stockStatus.color}`}>
             {stockStatus.text}
           </span>
-          {product.stock > 0 && (
-            <span className="text-sm text-gray-500">
-              {product.stock} left
-            </span>
-          )}
         </div>
       </div>
     </div>

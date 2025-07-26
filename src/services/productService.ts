@@ -111,10 +111,7 @@ export const productService = {
             aValue = parseUnitSize(a.unitSize);
             bValue = parseUnitSize(b.unitSize);
             break;
-          case 'stock':
-            aValue = a.stock;
-            bValue = b.stock;
-            break;
+
           case 'status':
             aValue = getStockStatus(a.stock);
             bValue = getStockStatus(b.stock);
