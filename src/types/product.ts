@@ -6,10 +6,11 @@ export interface Product {
   company: string;
   category: string;
   unitSize: string;
-  stock: number;
+  stockQuantity: number;
   image: string;
   brand: string;
   size: string;
+  isAvailable: boolean;
 }
 
 export interface ProductQueryParams {

@@ -32,13 +32,18 @@ function App() {
     showInStockOnly,
     setShowInStockOnly,
     clearFilters,
-    hasActiveFilters
+    hasActiveFilters,
+    companies,
+    categories,
+    brands,
+    sizes
   } = useProductFilters();
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const {
     sortColumn,
@@ -59,7 +64,8 @@ function App() {
     limit: itemsPerPage,
   }), [searchTerm, selectedCompany, selectedCategory, selectedBrand, selectedSize, showInStockOnly, sortColumn, sortDirection, currentPage, itemsPerPage]);
 
-  const { products, totalCount, companies, categories, brands, sizes, loading, error } = useProducts(productQueryParams);
+
+  const { products, totalCount, loading, error } = useProducts(productQueryParams);
   const { addToCart } = useCart();
 
   const {
@@ -84,34 +90,6 @@ function App() {
   const handleAddToCart = (product: Product, quantity: number, note: string, itemsPerPack: number) => {
     addToCart(product, quantity, note, itemsPerPack);
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="container mx-auto px-4 py-8 flex items-center justify-center">
-          <div className="flex items-center space-x-2">
-            <Loader className="h-6 w-6 animate-spin text-blue-600" />
-            <span className="text-lg text-gray-600">Loading products...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="container mx-auto px-4 py-8 flex items-center justify-center">
-          <div className="flex items-center space-x-2 text-red-600">
-            <AlertCircle className="h-6 w-6" />
-            <span className="text-lg">Error: {error}</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -139,6 +117,8 @@ function App() {
                 onBrandChange={setSelectedBrand}
                 onSizeChange={setSelectedSize}
                 onToggleInStockOnly={setShowInStockOnly}
+                showMobileFilters={showMobileFilters}
+                onToggleMobileFilters={setShowMobileFilters}
               />
             </div>
 
@@ -167,51 +147,75 @@ function App() {
             </div>
 
             {/* Products Grid */}
-            {products.length > 0 ? (
-              <>
-                {viewMode === 'grid' ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-                    {products.map(product => (
-                      <ProductCard key={product.id} product={product} onOrderClick={handleOrderClick} />
-                    ))}
+            <div className="relative">
+              {error ? (
+                <div className="text-center py-12">
+                  <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <AlertCircle className="h-8 w-8 text-red-400" />
                   </div>
-                ) : (
-                  <div className="mb-8">
-                    <ProductTable
-                      products={products}
-                      sortColumn={sortColumn}
-                      sortDirection={sortDirection}
-                      onSort={handleSort}
-                      onOrderClick={handleOrderClick}
-                    />
-                  </div>
-                )}
-
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={Math.ceil(totalCount / itemsPerPage)}
-                  onPageChange={goToPage}
-                  totalItems={totalCount}
-                  itemsPerPage={itemsPerPage}
-                />
-              </>
-            ) : (
-              <div className="text-center py-12">
-                <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                  <AlertCircle className="h-8 w-8 text-gray-400" />
+                  <h3 className="text-lg font-medium text-red-900 mb-2">Error: {error}</h3>
+                  <p className="text-gray-500 mb-4">
+                    Please try again later.
+                  </p>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
-                <p className="text-gray-500 mb-4">
-                  Try adjusting your search terms or filters to find what you're looking for.
-                </p>
-                <button
-                  onClick={clearFilters}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
-                >
-                  Clear All Filters
-                </button>
-              </div>
-            )}
+              ) : (
+                <>
+                  {products.length > 0 ? (
+                    <>
+                      {viewMode === 'grid' ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+                          {products.map(product => (
+                            <ProductCard key={product.id} product={product} onOrderClick={handleOrderClick} />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="mb-8">
+                          <ProductTable
+                            products={products}
+                            sortColumn={sortColumn}
+                            sortDirection={sortDirection}
+                            onSort={handleSort}
+                            onOrderClick={handleOrderClick}
+                          />
+                        </div>
+                      )}
+
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={Math.ceil(totalCount / itemsPerPage)}
+                        onPageChange={goToPage}
+                        totalItems={totalCount}
+                        itemsPerPage={itemsPerPage}
+                      />
+                    </>
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <AlertCircle className="h-8 w-8 text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+                      <p className="text-gray-500 mb-4">
+                        Try adjusting your search terms or filters to find what you're looking for.
+                      </p>
+                      <button
+                        onClick={clearFilters}
+                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                      >
+                        Clear All Filters
+                      </button>
+                    </div>
+                  )}
+                  {loading && (
+                    <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                      <div className="flex items-center space-x-2 text-blue-600">
+                        <Loader className="h-6 w-6 animate-spin" />
+                        <span>Loading products...</span>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </main>
         )} />
         <Route path="/cart" element={<CartSummaryPage />} />

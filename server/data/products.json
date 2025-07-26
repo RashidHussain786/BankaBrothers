@@ -7,7 +7,7 @@
     "brand": "Good Day",
     "unitSize": "200g",
     "size": "Small",
-    "stock": 25,
+    "stockQuantity": 25,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -18,7 +18,7 @@
     "brand": "Parle-G",
     "unitSize": "1kg",
     "size": "Large",
-    "stock": 8,
+    "stockQuantity": 8,
     "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -29,7 +29,7 @@
     "brand": "Lays",
     "unitSize": "50g",
     "size": "Small",
-    "stock": 0,
+    "stockQuantity": 0,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -40,7 +40,7 @@
     "brand": "Ghari",
     "unitSize": "1kg",
     "size": "Large",
-    "stock": 15,
+    "stockQuantity": 15,
     "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -51,7 +51,7 @@
     "brand": "Dairy Milk",
     "unitSize": "60g",
     "size": "Medium",
-    "stock": 3,
+    "stockQuantity": 3,
     "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -62,7 +62,7 @@
     "brand": "Marie Gold",
     "unitSize": "250g",
     "size": "Medium",
-    "stock": 18,
+    "stockQuantity": 18,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -73,7 +73,7 @@
     "brand": "Monaco",
     "unitSize": "200g",
     "size": "Small",
-    "stock": 5,
+    "stockQuantity": 5,
     "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -84,7 +84,7 @@
     "brand": "Kurkure",
     "unitSize": "100g",
     "size": "Small",
-    "stock": 12,
+    "stockQuantity": 12,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -95,7 +95,7 @@
     "brand": "Surf Excel",
     "unitSize": "500g",
     "size": "Medium",
-    "stock": 0,
+    "stockQuantity": 0,
     "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -106,7 +106,7 @@
     "brand": "Kit Kat",
     "unitSize": "37.3g",
     "size": "Small",
-    "stock": 22,
+    "stockQuantity": 22,
     "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -117,7 +117,7 @@
     "brand": "Tiger",
     "unitSize": "300g",
     "size": "Medium",
-    "stock": 7,
+    "stockQuantity": 7,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -128,7 +128,7 @@
     "brand": "Hide & Seek",
     "unitSize": "100g",
     "size": "Small",
-    "stock": 14,
+    "stockQuantity": 14,
     "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -139,7 +139,7 @@
     "brand": "Cheetos",
     "unitSize": "75g",
     "size": "Small",
-    "stock": 1,
+    "stockQuantity": 1,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -150,7 +150,7 @@
     "brand": "Ariel",
     "unitSize": "1kg",
     "size": "Large",
-    "stock": 9,
+    "stockQuantity": 9,
     "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -161,7 +161,7 @@
     "brand": "5 Star",
     "unitSize": "45g",
     "size": "Small",
-    "stock": 16,
+    "stockQuantity": 16,
     "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -172,7 +172,7 @@
     "brand": "Bhujia",
     "unitSize": "200g",
     "size": "Medium",
-    "stock": 11,
+    "stockQuantity": 11,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -183,7 +183,7 @@
     "brand": "Tide",
     "unitSize": "500g",
     "size": "Medium",
-    "stock": 4,
+    "stockQuantity": 4,
     "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -194,7 +194,7 @@
     "brand": "Oreo",
     "unitSize": "120g",
     "size": "Small",
-    "stock": 19,
+    "stockQuantity": 19,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -205,7 +205,7 @@
     "brand": "Ferrero Rocher",
     "unitSize": "200g",
     "size": "Medium",
-    "stock": 6,
+    "stockQuantity": 6,
     "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
   },
   {
@@ -216,7 +216,7 @@
     "brand": "Uncle Chips",
     "unitSize": "55g",
     "size": "Small",
-    "stock": 0,
+    "stockQuantity": 0,
     "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
   }
 ]

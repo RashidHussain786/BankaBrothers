@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Search, Filter, X, ChevronDown } from 'lucide-react';
 
 interface FilterAndSearchAreaProps {
@@ -18,6 +18,8 @@ interface FilterAndSearchAreaProps {
   onBrandChange: (brand: string) => void;
   onSizeChange: (size: string) => void;
   onToggleInStockOnly: (showOnly: boolean) => void;
+  showMobileFilters: boolean;
+  onToggleMobileFilters: (show: boolean) => void;
 }
 
 const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
@@ -36,13 +38,10 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
   onCategoryChange,
   onBrandChange,
   onSizeChange,
-  onToggleInStockOnly
+  onToggleInStockOnly,
+  showMobileFilters,
+  onToggleMobileFilters
 }) => {
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
-
-  const toggleMobileFilters = () => {
-    setShowMobileFilters(!showMobileFilters);
-  };
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
@@ -80,7 +79,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                 className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
               >
                 <option value="">All Companies</option>
-                {companies.map((company) => (
+                {companies?.map((company) => (
                   <option key={company} value={company}>
                     {company}
                   </option>
@@ -99,10 +98,10 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
               <select
                 value={selectedCategory}
                 onChange={(e) => onCategoryChange(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white md:appearance-none pr-8 sm:text-sm"
               >
                 <option value="">All Categories</option>
-                {categories.map((category) => (
+                {categories?.map((category) => (
                   <option key={category} value={category}>
                     {category}
                   </option>
@@ -119,17 +118,18 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
             </label>
             <div className="relative">
               <select
-                value={selectedBrand}
-                onChange={(e) => onBrandChange(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
-              >
-                <option value="">All Brands</option>
-                {brands.map((brand) => (
-                  <option key={brand} value={brand}>
-                    {brand}
-                  </option>
-                ))}
-              </select>
+                  value={selectedBrand}
+                  onChange={(e) => onBrandChange(e.target.value)}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white md:appearance-none pr-8 sm:text-sm"
+                >
+                  <option value="">All Brands</option>
+                  {brands?.map((brand) => (
+                    <option key={brand} value={brand}>
+                      {brand}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
               <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
             </div>
           </div>
@@ -143,15 +143,16 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
               <select
                 value={selectedSize}
                 onChange={(e) => onSizeChange(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white md:appearance-none pr-8 sm:text-sm"
               >
                 <option value="">All Sizes</option>
-                {sizes.map((size) => (
+                {sizes?.map((size) => (
                   <option key={size} value={size}>
                     {size}
                   </option>
                 ))}
               </select>
+              <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
               <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
             </div>
           </div>
@@ -199,7 +200,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
               />
             </div>
             <button
-              onClick={toggleMobileFilters}
+              onClick={() => onToggleMobileFilters(true)}
               className="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
             >
               <Filter className="h-5 w-5" />
@@ -214,7 +215,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                 <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
               </div>
               <button
-                onClick={toggleMobileFilters}
+                onClick={() => onToggleMobileFilters(false)}
                 className="flex items-center justify-center w-8 h-8 text-gray-500 hover:text-gray-700 transition-colors duration-200"
               >
                 <X className="h-5 w-5" />
@@ -230,7 +231,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                 <select
                   value={selectedCompany}
                   onChange={(e) => onCompanyChange(e.target.value)}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white md:appearance-none pr-8"
                 >
                   <option value="">All Companies</option>
                   {companies.map((company) => (
@@ -239,7 +240,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
               </div>
             </div>
 
@@ -252,7 +253,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                 <select
                   value={selectedCategory}
                   onChange={(e) => onCategoryChange(e.target.value)}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white md:appearance-none pr-8"
                 >
                   <option value="">All Categories</option>
                   {categories.map((category) => (
@@ -261,7 +262,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
               </div>
             </div>
 
@@ -274,7 +275,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                 <select
                   value={selectedBrand}
                   onChange={(e) => onBrandChange(e.target.value)}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white md:appearance-none pr-8"
                 >
                   <option value="">All Brands</option>
                   {brands.map((brand) => (
@@ -283,7 +284,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
               </div>
             </div>
 
@@ -296,7 +297,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                 <select
                   value={selectedSize}
                   onChange={(e) => onSizeChange(e.target.value)}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white md:appearance-none pr-8"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white md:appearance-none pr-8"
                 >
                   <option value="">All Sizes</option>
                   {sizes.map((size) => (
@@ -305,7 +306,7 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="hidden md:block absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
               </div>
             </div>
 

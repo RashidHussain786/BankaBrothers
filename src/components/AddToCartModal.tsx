@@ -48,7 +48,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   };
 
   const handleAddToCart = () => {
-    if (product.stock === 0) {
+    if (!product.isAvailable) {
       alert('This product is out of stock.');
       return;
     }
@@ -64,7 +64,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
     onClose();
   };
 
-  const isAddToCartDisabled = product.stock === 0 || quantity < 1 || itemsPerPack < 1;
+  const isAddToCartDisabled = !product.isAvailable || quantity < 1 || itemsPerPack < 1;
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
@@ -134,7 +134,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
           disabled={isAddToCartDisabled}
           className={`w-full mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${isAddToCartDisabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'}`}
         >
-          {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+          {!product.isAvailable ? 'Out of Stock' : 'Add to Cart'}
         </button>
       </div>
     </div>

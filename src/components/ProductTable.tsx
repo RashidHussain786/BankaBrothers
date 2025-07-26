@@ -17,10 +17,10 @@ const ProductTable: React.FC<ProductTableProps> = ({
   onSort,
   onOrderClick
 }) => {
-  const getStockStatus = (stock: number) => {
-    if (stock === 0) {
+  const getStockStatus = (stockQuantity: number) => {
+    if (stockQuantity === 0) {
       return { text: 'Out of Stock', color: 'text-red-600 bg-red-50' };
-    } else if (stock <= 10) {
+    } else if (stockQuantity <= 10) {
       return { text: 'Low Stock', color: 'text-amber-600 bg-amber-50' };
     } else {
       return { text: 'In Stock', color: 'text-green-600 bg-green-50' };
@@ -69,11 +69,12 @@ const ProductTable: React.FC<ProductTableProps> = ({
               <SortableHeader column="unitSize">Unit Size</SortableHeader>
               
               <SortableHeader column="status">Status</SortableHeader>
+              <th></th> {/* Empty header for the Order button column */}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {products.map((product) => {
-              const stockStatus = getStockStatus(product.stock);
+              const stockStatus = getStockStatus(product.stockQuantity);
               return (
                 <tr key={product.id} className="hover:bg-gray-50 transition-colors duration-150">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -111,10 +112,11 @@ const ProductTable: React.FC<ProductTableProps> = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
-                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200"
+                    className={`px-4 py-2 text-white text-sm font-medium rounded-md transition-colors duration-200 ${product.isAvailable ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
                     onClick={() => onOrderClick(product)}
+                    disabled={!product.isAvailable}
                   >
-                    Order
+                    {product.isAvailable ? 'Order' : 'Out of Stock'}
                   </button>
                 </td>
                 </tr>

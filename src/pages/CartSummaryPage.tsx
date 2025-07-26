@@ -50,20 +50,54 @@ const CartSummaryPage: React.FC = () => {
     updateCartItemQuantity(productId, newQuantity, note, itemsPerPack);
   };
 
-  const generateOrderId = () => {
-    return Math.floor(10000 + Math.random() * 90000).toString();
-  };
+  
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (cartItems.length === 0) {
       alert('Your cart is empty. Please add items before placing an order.');
       return;
     }
 
     if (validateForm()) {
-      setOrderId(generateOrderId());
-      setOrderPlaced(true);
-      clearCart();
+      const orderData = {
+        customerInfo: {
+          name: customerName,
+          mobile: mobileNumber,
+          address: deliveryAddress,
+          deliveryTime: preferredDeliveryTime,
+          additionalNote: additionalNote,
+        },
+        cartItems: cartItems.map(item => ({
+          productId: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          unitSize: item.unitSize,
+          itemsPerPack: item.itemsPerPack,
+          note: item.note,
+        })),
+      };
+
+      try {
+        const response = await fetch('http://localhost:3001/api/order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Order submission failed: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        setOrderId(result.orderId);
+        setOrderPlaced(true);
+        clearCart();
+      } catch (error) {
+        console.error('Error placing order:', error);
+        alert(`Failed to place order: ${error.message}`);
+      }
     }
   };
 
