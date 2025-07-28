@@ -67,6 +67,13 @@ const ProductListingPage = () => {
   const { products, totalCount, loading, error } = useProducts(productQueryParams);
   const { addToCart } = useCart();
 
+  useEffect(() => {
+    // If current page is empty but there are total results, reset to page 1
+    if (!loading && products.length === 0 && totalCount > 0 && currentPage > 1) {
+      setCurrentPage(1);
+    }
+  }, [products, totalCount, loading, currentPage]);
+
   const {
     goToPage
   } = usePagination({
