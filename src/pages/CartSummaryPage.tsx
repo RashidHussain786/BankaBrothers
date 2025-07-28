@@ -64,6 +64,10 @@ const CartSummaryPage: React.FC = () => {
     }
 
     if (validateForm()) {
+        if (!user?.id) {
+          alert('User not authenticated. Please log in to place an order.');
+          return;
+        }
       const orderData: OrderData = {
         userId: user?.id, // Add userId here
         customerInfo: {
@@ -138,11 +142,7 @@ const CartSummaryPage: React.FC = () => {
               <div className="divide-y divide-gray-200">
                 {cartItems.map((item) => (
                   <div key={`${item.id}-${item.note}-${item.itemsPerPack}`} className="flex items-center py-4">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="h-20 w-20 object-cover rounded-lg mr-4"
-                    />
+                    
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
                       <p className="text-sm text-gray-600">{item.company} - {item.unitSize}</p>

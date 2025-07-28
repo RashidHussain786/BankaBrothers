@@ -7,8 +7,7 @@
     "brand": "Good Day",
     "unitSize": "200g",
     "size": "Small",
-    "stockQuantity": 25,
-    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 25
   },
   {
     "id": 2,
@@ -18,8 +17,7 @@
     "brand": "Parle-G",
     "unitSize": "1kg",
     "size": "Large",
-    "stockQuantity": 8,
-    "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 8
   },
   {
     "id": 3,
@@ -29,8 +27,7 @@
     "brand": "Lays",
     "unitSize": "50g",
     "size": "Small",
-    "stockQuantity": 0,
-    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 0
   },
   {
     "id": 4,
@@ -40,8 +37,7 @@
     "brand": "Ghari",
     "unitSize": "1kg",
     "size": "Large",
-    "stockQuantity": 15,
-    "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 15
   },
   {
     "id": 5,
@@ -51,8 +47,7 @@
     "brand": "Dairy Milk",
     "unitSize": "60g",
     "size": "Medium",
-    "stockQuantity": 3,
-    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 3
   },
   {
     "id": 6,
@@ -62,8 +57,7 @@
     "brand": "Marie Gold",
     "unitSize": "250g",
     "size": "Medium",
-    "stockQuantity": 18,
-    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 18
   },
   {
     "id": 7,
@@ -73,8 +67,7 @@
     "brand": "Monaco",
     "unitSize": "200g",
     "size": "Small",
-    "stockQuantity": 5,
-    "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 5
   },
   {
     "id": 8,
@@ -84,8 +77,7 @@
     "brand": "Kurkure",
     "unitSize": "100g",
     "size": "Small",
-    "stockQuantity": 12,
-    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 12
   },
   {
     "id": 9,
@@ -95,8 +87,7 @@
     "brand": "Surf Excel",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 0,
-    "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 0
   },
   {
     "id": 10,
@@ -106,8 +97,7 @@
     "brand": "Kit Kat",
     "unitSize": "37.3g",
     "size": "Small",
-    "stockQuantity": 22,
-    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 22
   },
   {
     "id": 11,
@@ -117,8 +107,7 @@
     "brand": "Tiger",
     "unitSize": "300g",
     "size": "Medium",
-    "stockQuantity": 7,
-    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 7
   },
   {
     "id": 12,
@@ -128,8 +117,7 @@
     "brand": "Hide & Seek",
     "unitSize": "100g",
     "size": "Small",
-    "stockQuantity": 14,
-    "image": "https://images.pexels.com/photos/4686823/pexels-photo-4686823.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 14
   },
   {
     "id": 13,
@@ -139,8 +127,7 @@
     "brand": "Cheetos",
     "unitSize": "75g",
     "size": "Small",
-    "stockQuantity": 1,
-    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 1
   },
   {
     "id": 14,
@@ -150,8 +137,7 @@
     "brand": "Ariel",
     "unitSize": "1kg",
     "size": "Large",
-    "stockQuantity": 9,
-    "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 9
   },
   {
     "id": 15,
@@ -161,8 +147,7 @@
     "brand": "5 Star",
     "unitSize": "45g",
     "size": "Small",
-    "stockQuantity": 16,
-    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 16
   },
   {
     "id": 16,
@@ -172,8 +157,7 @@
     "brand": "Bhujia",
     "unitSize": "200g",
     "size": "Medium",
-    "stockQuantity": 11,
-    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 11
   },
   {
     "id": 17,
@@ -183,8 +167,7 @@
     "brand": "Tide",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 4,
-    "image": "https://images.pexels.com/photos/4726158/pexels-photo-4726158.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 4
   },
   {
     "id": 18,
@@ -194,8 +177,7 @@
     "brand": "Oreo",
     "unitSize": "120g",
     "size": "Small",
-    "stockQuantity": 19,
-    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 19
   },
   {
     "id": 19,
@@ -205,8 +187,7 @@
     "brand": "Ferrero Rocher",
     "unitSize": "200g",
     "size": "Medium",
-    "stockQuantity": 6,
-    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 6
   },
   {
     "id": 20,
@@ -216,8 +197,7 @@
     "brand": "Uncle Chips",
     "unitSize": "55g",
     "size": "Small",
-    "stockQuantity": 0,
-    "image": "https://images.pexels.com/photos/4956000/pexels-photo-4956000.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 0
   },
   {
     "id": 21,
@@ -227,8 +207,7 @@
     "brand": "Perk",
     "unitSize": "30g",
     "size": "Small",
-    "stockQuantity": 20,
-    "image": "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 20
   },
   {
     "id": 22,
@@ -238,8 +217,7 @@
     "brand": "Tata Tea",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 10,
-    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 10
   },
   {
     "id": 23,
@@ -249,8 +227,7 @@
     "brand": "Boost",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 7,
-    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 7
   },
   {
     "id": 24,
@@ -260,8 +237,7 @@
     "brand": "Pepsi",
     "unitSize": "1.25L",
     "size": "Large",
-    "stockQuantity": 13,
-    "image": "https://images.pexels.com/photos/161888/soda-soft-drink-refreshment-cold-161888.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 13
   },
   {
     "id": 25,
@@ -271,8 +247,7 @@
     "brand": "Nescafe",
     "unitSize": "100g",
     "size": "Small",
-    "stockQuantity": 6,
-    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 6
   },
   {
     "id": 26,
@@ -282,8 +257,7 @@
     "brand": "Bournvita",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 5,
-    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 5
   },
   {
     "id": 27,
@@ -293,8 +267,7 @@
     "brand": "Sunfeast",
     "unitSize": "75g",
     "size": "Small",
-    "stockQuantity": 9,
-    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 9
   },
   {
     "id": 28,
@@ -304,8 +277,7 @@
     "brand": "Milkmaid",
     "unitSize": "400g",
     "size": "Medium",
-    "stockQuantity": 4,
-    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 4
   },
   {
     "id": 29,
@@ -315,8 +287,7 @@
     "brand": "Amul",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 12,
-    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 12
   },
   {
     "id": 30,
@@ -326,7 +297,6 @@
     "brand": "Maggi",
     "unitSize": "70g",
     "size": "Small",
-    "stockQuantity": 30,
-    "image": "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=300"
+    "stockQuantity": 30
   }
 ]

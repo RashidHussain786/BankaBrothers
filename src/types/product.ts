@@ -7,7 +7,7 @@ export interface Product {
   category: string;
   unitSize: string;
   stockQuantity: number;
-  image: string;
+  
   brand: string;
   size: string;
   isAvailable: boolean;

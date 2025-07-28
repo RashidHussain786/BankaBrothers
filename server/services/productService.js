@@ -14,7 +14,6 @@ const REQUIRED_FIELDS = [
   'unitSize',
   'size',
   'stockQuantity',
-  'image',
 ];
 
 // Load products data

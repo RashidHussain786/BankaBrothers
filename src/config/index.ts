@@ -20,5 +20,4 @@ export const REQUIRED_FIELDS = [
     'unitSize',
     'size',
     'stockQuantity',
-    'image',
 ];
