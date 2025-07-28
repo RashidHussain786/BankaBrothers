@@ -53,3 +53,34 @@ exports.verifyCredentials = async (username, password) => {
   }
   return null;
 };
+
+exports.getAllUsers = () => {
+  const users = loadUsers();
+  return users.map(u => ({ id: u.id, username: u.username, role: u.role }));
+};
+
+exports.deleteUser = (id) => {
+  let users = loadUsers();
+  const initialLength = users.length;
+  users = users.filter(u => u.id !== parseInt(id));
+
+  if (users.length === initialLength) {
+    throw new Error('User not found');
+  }
+
+  saveUsers(users);
+};
+
+exports.updateUser = (id, { role }) => {
+  let users = loadUsers();
+  const userIndex = users.findIndex(u => u.id === parseInt(id));
+
+  if (userIndex === -1) {
+    throw new Error('User not found');
+  }
+
+  users[userIndex].role = role;
+  saveUsers(users);
+
+  return users[userIndex];
+};

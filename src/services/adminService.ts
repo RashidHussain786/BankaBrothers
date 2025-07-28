@@ -1,4 +1,4 @@
-import { CreateUserResponse } from "../types";
+import { CreateUserResponse, User } from "../types";
 import { API_BASE_URL } from '../config';
 
 export const adminService = {
@@ -15,6 +15,53 @@ export const adminService = {
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.message || 'Failed to create user');
+        }
+
+        return response.json();
+    },
+
+    getAllUsers: async (token: string): Promise<User[]> => {
+        const response = await fetch(`${API_BASE_URL}/admin/users`, {
+            headers: {
+                'x-auth-token': token,
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to fetch users');
+        }
+
+        return response.json();
+    },
+
+    deleteUser: async (userId: string, token: string): Promise<void> => {
+        const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'x-auth-token': token,
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to delete user');
+        }
+    },
+
+    updateUser: async (userId: string, role: 'admin' | 'user', token: string): Promise<User> => {
+        const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': token,
+            },
+            body: JSON.stringify({ role }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to update user');
         }
 
         return response.json();

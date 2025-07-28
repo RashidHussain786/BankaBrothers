@@ -4,8 +4,8 @@ This document outlines the conventions and best practices for the Banka Brother 
 
 ## Project Overview
 
-*   **Framework:** React (with Vite)
-*   **Language:** TypeScript
+*   **Framework:** React (with Vite) and Node.js (with Express)
+*   **Language:** TypeScript and JavaScript
 *   **Styling:** Tailwind CSS
 *   **Linting:** ESLint
 *   **Package Manager:** npm
@@ -30,6 +30,21 @@ This document outlines the conventions and best practices for the Banka Brother 
 ├───public/
 │   ├───products.json
 │   └───store-icon.svg
+├───server/
+│   ├───controllers/
+│   │   ├───adminController.js
+│   │   └───...
+│   ├───data/
+│   │   ├───products.json
+│   │   └───users.json
+│   ├───middleware/
+│   │   └───authMiddleware.js
+│   ├───routes/
+│   │   ├───adminRoutes.js
+│   │   └───...
+│   └───services/
+│       ├───userService.js
+│       └───...
 └───src/
     ├───App.tsx
     ├───index.css
@@ -38,6 +53,7 @@ This document outlines the conventions and best practices for the Banka Brother 
     ├───components/
     │   ├───AddToCartModal.tsx
     │   ├───CartIcon.tsx
+    │   ├───EditUserModal.tsx
     │   ├───FilterAndSearchArea.tsx
     │   ├───Header.tsx
     │   ├───ItemsPerPageSelector.tsx
@@ -53,16 +69,29 @@ This document outlines the conventions and best practices for the Banka Brother 
     │   ├───useProducts.ts
     │   └───useSorting.ts
     ├───pages/
-    │   └───CartSummaryPage.tsx
+    │   ├───AdminUserManagementPage.tsx
+    │   ├───CartSummaryPage.tsx
+    │   └───...
     ├───services/
+    │   ├───adminService.ts
     │   └───productService.ts
     └───types/
         ├───cart.ts
         ├───index.ts
         ├───pagination.ts
         ├───product.ts
-        └───sorting.ts
+        ├───sorting.ts
+        └───user.ts
 ```
+
+## Features
+
+### Admin User Management
+Admins can access a user management page to:
+*   View a list of all users.
+*   Add new users.
+*   Edit existing user roles (admin/user).
+*   Delete users.
 
 ## Development
 
@@ -70,6 +99,12 @@ To start the development server, run:
 
 ```bash
 npm run dev
+```
+
+To start the backend server, run:
+
+```bash
+node server/index.js
 ```
 
 ## Building for Production
@@ -136,8 +171,9 @@ This project uses the following dependencies:
 
 ### Data Fetching
 
-*   Data is fetched from the `public/products.json` file.
+*   Data is fetched from the `public/products.json` file and the backend server.
 *   The `useProducts` custom hook is responsible for fetching and managing product data.
+*   The `adminService` is responsible for user management data.
 
 ### File Naming
 

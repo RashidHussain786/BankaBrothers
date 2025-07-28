@@ -21,7 +21,7 @@ const Header: React.FC = () => {
           <Link to="/" className="flex items-center">
             <Store className="h-8 w-8 text-blue-600 mr-3" />
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Banka Brother</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Banka Brothers</h1>
             </div>
           </Link>
 
@@ -63,10 +63,10 @@ const Header: React.FC = () => {
                   Import Products
                 </button>
                 <Link
-                  to="/admin/create-user"
+                  to="/admin/user-management"
                   className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                 >
-                  Add User
+                  Manage Users
                 </Link>
               </>
             )}
@@ -125,11 +125,11 @@ const Header: React.FC = () => {
                 Import Products
               </button>
               <Link
-                to="/admin/create-user"
+                to="/admin/user-management"
                 className="block px-4 py-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Add User
+                Manage Users
               </Link>
             </>
           )}
