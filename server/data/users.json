@@ -3,24 +3,36 @@
     "id": 2,
     "username": "rashid",
     "password_hash": "$2b$10$pkS5KP2RIwQuFGoGYhNyQeOonODvewq7TZHMCFPhzGY9GmldxuD9m",
-    "role": "admin"
+    "role": "admin",
+    "totalOrders": 0,
+    "orderIds": []
   },
   {
     "id": 3,
     "username": "Sidhant",
     "password_hash": "$2b$10$VuJufOnjV/TTy5HvcQW8dO.vtmXAIOUVjwomZurLKhgmYBYcY6gde",
-    "role": "user"
+    "role": "user",
+    "totalOrders": 3,
+    "orderIds": [
+      1,
+      2,
+      3
+    ]
   },
   {
     "id": 4,
     "username": "agarwal",
     "password_hash": "$2b$10$Jh7hH89vh7EZJztV328Fn.sid1Ih2pLTMLbNL04LZDFSW7LDZVeD2",
-    "role": "user"
+    "role": "user",
+    "totalOrders": 0,
+    "orderIds": []
   },
   {
     "id": 5,
     "username": "keshav",
     "password_hash": "$2b$10$aawVcnbZX7aN/UoXdOeKJuzYSupc0nWANOy7A6EbNWyImzL/xIrIe",
-    "role": "admin"
+    "role": "admin",
+    "totalOrders": 0,
+    "orderIds": []
   }
 ]

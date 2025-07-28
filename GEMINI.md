@@ -33,16 +33,20 @@ This document outlines the conventions and best practices for the Banka Brother 
 ├───server/
 │   ├───controllers/
 │   │   ├───adminController.js
+│   │   ├───orderController.js
 │   │   └───...
 │   ├───data/
+│   │   ├───orders.json
 │   │   ├───products.json
 │   │   └───users.json
 │   ├───middleware/
 │   │   └───authMiddleware.js
 │   ├───routes/
 │   │   ├───adminRoutes.js
+│   │   ├───orderRoutes.js
 │   │   └───...
 │   └───services/
+│       ├───orderService.js
 │       ├───userService.js
 │       └───...
 └───src/
@@ -69,15 +73,18 @@ This document outlines the conventions and best practices for the Banka Brother 
     │   ├───useProducts.ts
     │   └───useSorting.ts
     ├───pages/
+    │   ├───AdminOrderManagementPage.tsx
     │   ├───AdminUserManagementPage.tsx
     │   ├───CartSummaryPage.tsx
     │   └───...
     ├───services/
     │   ├───adminService.ts
+    │   ├───orderService.ts
     │   └───productService.ts
     └───types/
         ├───cart.ts
         ├───index.ts
+        ├───order.ts
         ├───pagination.ts
         ├───product.ts
         ├───sorting.ts
@@ -89,9 +96,17 @@ This document outlines the conventions and best practices for the Banka Brother 
 ### Admin User Management
 Admins can access a user management page to:
 *   View a list of all users.
+*   View total number of orders for each user.
 *   Add new users.
 *   Edit existing user roles (admin/user).
 *   Delete users.
+
+### Order Management
+
+*   Users can place orders, and their cart contents are saved as new orders.
+*   Admins can view all orders on a dedicated management page.
+*   Admins can mark orders as "completed".
+*   Admins receive real-time toast notifications for new pending orders.
 
 ## Development
 
@@ -133,6 +148,7 @@ This project uses the following dependencies:
 *   `react`: ^18.3.1
 *   `react-dom`: ^18.3.1
 *   `react-router-dom`: ^7.7.1
+*   `react-toastify`: ^10.0.5
 
 ### Development Dependencies
 
@@ -173,7 +189,7 @@ This project uses the following dependencies:
 
 *   Data is fetched from the `public/products.json` file and the backend server.
 *   The `useProducts` custom hook is responsible for fetching and managing product data.
-*   The `adminService` is responsible for user management data.
+*   The `adminService` is responsible for user and order management data.
 
 ### File Naming
 

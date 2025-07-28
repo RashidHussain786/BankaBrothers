@@ -56,7 +56,7 @@ exports.verifyCredentials = async (username, password) => {
 
 exports.getAllUsers = () => {
   const users = loadUsers();
-  return users.map(u => ({ id: u.id, username: u.username, role: u.role }));
+  return users.map(u => ({ id: u.id, username: u.username, role: u.role, totalOrders: u.totalOrders }));
 };
 
 exports.deleteUser = (id) => {
@@ -83,4 +83,17 @@ exports.updateUser = (id, { role }) => {
   saveUsers(users);
 
   return users[userIndex];
+};
+
+exports.addOrderIdToUser = (userId, orderId) => {
+  let users = loadUsers();
+  const userIndex = users.findIndex(u => u.id === userId);
+
+  if (userIndex === -1) {
+    throw new Error('User not found');
+  }
+
+  users[userIndex].orderIds.push(orderId);
+  users[userIndex].totalOrders = users[userIndex].orderIds.length;
+  saveUsers(users);
 };

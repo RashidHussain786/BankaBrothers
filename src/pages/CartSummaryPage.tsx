@@ -4,8 +4,11 @@ import { Link } from 'react-router-dom';
 import { Trash2, PlusCircle, MinusCircle, ShoppingCart } from 'lucide-react';
 import { orderService } from '../services/orderService';
 import { OrderData } from '../types';
+import { useAuth } from '../context/AuthContext';
+
 const CartSummaryPage: React.FC = () => {
   const { cartItems, removeFromCart, updateCartItemQuantity, totalItemsInCart, clearCart } = useCart();
+  const { token, user } = useAuth();
 
   const [customerName, setCustomerName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -62,6 +65,7 @@ const CartSummaryPage: React.FC = () => {
 
     if (validateForm()) {
       const orderData: OrderData = {
+        userId: user?.id, // Add userId here
         customerInfo: {
           name: customerName,
           mobile: mobileNumber,
@@ -70,7 +74,7 @@ const CartSummaryPage: React.FC = () => {
           additionalNote: additionalNote,
         },
         cartItems: cartItems.map(item => ({
-          productId: item.id,
+          id: item.id,
           name: item.name,
           quantity: item.quantity,
           unitSize: item.unitSize,
@@ -80,7 +84,10 @@ const CartSummaryPage: React.FC = () => {
       };
 
       try {
-        const result = await orderService.submitOrder(orderData);
+        if (!token) {
+          throw new Error('Authentication token not found.');
+        }
+        const result = await orderService.submitOrder(orderData, token);
         setOrderId(result.orderId);
         setOrderPlaced(true);
         clearCart();

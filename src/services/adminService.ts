@@ -1,4 +1,4 @@
-import { CreateUserResponse, User } from "../types";
+import { CreateUserResponse, User, Order } from "../types";
 import { API_BASE_URL } from '../config';
 
 export const adminService = {
@@ -62,6 +62,39 @@ export const adminService = {
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.message || 'Failed to update user');
+        }
+
+        return response.json();
+    },
+
+    getAllOrders: async (token: string): Promise<Order[]> => {
+        const response = await fetch(`${API_BASE_URL}/order`, {
+            headers: {
+                'x-auth-token': token,
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to fetch orders');
+        }
+
+        return response.json();
+    },
+
+    updateOrderStatus: async (orderId: number, status: 'pending' | 'completed', token: string): Promise<Order> => {
+        const response = await fetch(`${API_BASE_URL}/order/${orderId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': token,
+            },
+            body: JSON.stringify({ status }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to update order status');
         }
 
         return response.json();
