@@ -1,36 +1,17 @@
-const fs = require('fs');
-const path = require('path');
 const csv = require('csv-parser');
+const fs = require('fs');
+const prisma = require('../config/prisma'); // Import the Prisma client
 
-const productsFilePath = path.join(__dirname, '..', 'data', 'products.json');
-let products = [];
-
-const REQUIRED_FIELDS = [
-  'id',
-  'name',
-  'company',
-  'category',
-  'brand',
-  'unitSize',
-  'size',
-  'stockQuantity',
-];
-
-// Load products data
-try {
-  const data = fs.readFileSync(productsFilePath, 'utf8');
-  products = JSON.parse(data);
-} catch (err) {
-  console.error('Error reading products.json:', err);
-}
-
+// Helper function to determine stock status (can be moved to a utility if used elsewhere)
 const getStockStatus = (stockQuantity) => {
   if (stockQuantity === 0) return 0; // Out of Stock
   if (stockQuantity <= 10) return 1; // Low Stock
   return 2; // In Stock
 };
 
+// Helper function to parse unit size (can be moved to a utility if used elsewhere)
 const parseUnitSize = (unitSize) => {
+  if (!unitSize) return 0;
   const match = unitSize.match(/^(\d+(?:\.\d+)?)(.*)/);
   if (!match) return 0;
 
@@ -56,30 +37,42 @@ exports.importProductsFromCSV = (filePath) => {
     fs.createReadStream(filePath)
       .pipe(csv())
       .on('data', (data) => {
-        // Validate required fields
-        const missingFields = REQUIRED_FIELDS.filter(field => !(field in data));
-        if (missingFields.length > 0) {
-          error = `Missing required fields: ${missingFields.join(', ')}. CSV columns found: ${Object.keys(data).join(', ')}`;
-          return;
-        }
-        // Convert types
+        // Basic validation and type conversion
         const processedData = {
-          ...data,
-          id: parseInt(data.id),
-          stockQuantity: parseInt(data.stockQuantity)
+          id: parseInt(data.id), // Assuming ID is provided in CSV for upsert
+          name: data.name,
+          company: data.company || null,
+          category: data.category || null,
+          brand: data.brand || null,
+          unitSize: data.unitSize || null,
+          itemsPerPack: data.itemsPerPack ? parseInt(data.itemsPerPack) : null,
+          image: data.image || null,
+          price: parseFloat(data.price),
+          stockQuantity: data.stockQuantity ? parseInt(data.stockQuantity) : null,
         };
         results.push(processedData);
       })
-      .on('end', () => {
+      .on('end', async () => {
         if (error) {
           reject(new Error(error));
           return;
         }
-        // Overwrite products.json
-        fs.writeFileSync(productsFilePath, JSON.stringify(results, null, 2));
-        // Update in-memory products
-        products = results;
-        resolve('Products imported successfully.');
+        try {
+          // Use a transaction to ensure all or nothing
+          await prisma.$transaction(
+            results.map((productData) =>
+              prisma.product.upsert({
+                where: { name: productData.name }, // Assuming name is unique for upsert
+                update: productData,
+                create: productData,
+              })
+            )
+          );
+          resolve('Products imported successfully.');
+        } catch (dbError) {
+          console.error('Database error during CSV import:', dbError);
+          reject(new Error('Failed to import products to database.'));
+        }
       })
       .on('error', (err) => {
         reject(new Error('Failed to process CSV file.'));
@@ -87,156 +80,162 @@ exports.importProductsFromCSV = (filePath) => {
   });
 };
 
-exports.findProducts = (params) => {
-  let filteredProducts = [...products];
-
-  // Dynamically add isAvailable
-  filteredProducts = filteredProducts.map(p => ({
-    ...p,
-    isAvailable: p.stockQuantity > 0
-  }));
-
-  // Filtering
+exports.findProducts = async (params) => {
   const { search, company, category, brand, size, inStockOnly, sortColumn, sortDirection, page, limit } = params;
 
+  const where = {};
   if (search) {
-    const searchTermLower = search.toLowerCase();
-    filteredProducts = filteredProducts.filter(product =>
-      product.name.toLowerCase().includes(searchTermLower) ||
-      product.company.toLowerCase().includes(searchTermLower)
-    );
+    where.OR = [
+      { name: { contains: search, mode: 'insensitive' } },
+      { company: { contains: search, mode: 'insensitive' } },
+    ];
   }
-
   if (company) {
-    filteredProducts = filteredProducts.filter(product => product.company === company);
+    where.company = company;
   }
-
   if (category) {
-    filteredProducts = filteredProducts.filter(product => product.category === category);
+    where.category = category;
   }
-
   if (brand) {
-    filteredProducts = filteredProducts.filter(product => product.brand === brand);
+    where.brand = brand;
   }
-
+  // 'size' mapping to 'unitSize' or other fields might need more specific logic based on your data
+  // For now, assuming 'size' refers to unitSize
   if (size) {
-    filteredProducts = filteredProducts.filter(product => product.size === size);
+    where.unitSize = size;
   }
-
   if (inStockOnly === 'true') {
-    filteredProducts = filteredProducts.filter(product => product.stockQuantity > 0);
+    where.stockQuantity = { gt: 0 };
   }
 
-  // Sorting
+  const orderBy = {};
   if (sortColumn && sortDirection) {
-    filteredProducts.sort((a, b) => {
-      let aValue;
-      let bValue;
-
-      switch (sortColumn) {
-        case 'name':
-        case 'company':
-        case 'category':
-        case 'brand':
-        case 'size':
-          aValue = a[sortColumn].toLowerCase();
-          bValue = b[sortColumn].toLowerCase();
-          break;
-        case 'unitSize':
-          aValue = parseUnitSize(a.unitSize);
-          bValue = parseUnitSize(b.unitSize);
-          break;
-        case 'stockQuantity':
-          aValue = a.stockQuantity;
-          bValue = b.stockQuantity;
-          break;
-        case 'status':
-          aValue = getStockStatus(a.stockQuantity);
-          bValue = getStockStatus(b.stockQuantity);
-          break;
-        default:
-          return 0;
-      }
-
-      if (aValue < bValue) {
-        return sortDirection === 'asc' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortDirection === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
+    // Handle specific sorting logic for unitSize and stockStatus if needed
+    // For now, direct mapping for simple columns
+    if (sortColumn === 'unitSize') {
+      // Sorting by parsed unit size is complex in Prisma directly.
+      // Might need raw query or sort in application after fetching.
+      // For simplicity, sorting by string for now.
+      orderBy.unitSize = sortDirection;
+    } else if (sortColumn === 'status') {
+      // Sorting by status (derived from stockQuantity) is also complex directly.
+      // Might need raw query or sort in application after fetching.
+      orderBy.stockQuantity = sortDirection; // Sort by stockQuantity as a proxy
+    } else {
+      orderBy[sortColumn] = sortDirection;
+    }
   }
 
-  // Pagination
   const pageNum = parseInt(page) || 1;
   const limitNum = parseInt(limit) || 10;
-  const startIndex = (pageNum - 1) * limitNum;
-  const endIndex = startIndex + limitNum;
+  const skip = (pageNum - 1) * limitNum;
+  const take = limitNum;
 
-  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+  const [products, totalCount] = await prisma.$transaction([
+    prisma.product.findMany({
+      where,
+      orderBy,
+      skip,
+      take,
+    }),
+    prisma.product.count({ where }),
+  ]);
+
+  // Add isAvailable and stockStatus after fetching if not directly in DB
+  const processedProducts = products.map(p => ({
+    ...p,
+    isAvailable: p.stockQuantity > 0,
+    stockStatus: getStockStatus(p.stockQuantity), // Add stockStatus
+  }));
 
   return {
-    data: paginatedProducts,
-    totalCount: filteredProducts.length,
+    data: processedProducts,
+    totalCount,
   };
 };
 
-exports.findProductById = (id) => {
-  const product = products.find(p => p.id === id);
+exports.findProductById = async (id) => {
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(id) },
+  });
   if (product) {
     return { ...product, isAvailable: product.stockQuantity > 0 };
   }
   return null;
 };
 
-exports.getUniqueCompanies = () => {
-  return [...new Set(products.map(p => p.company))].sort();
+exports.getUniqueCompanies = async () => {
+  const companies = await prisma.product.findMany({
+    distinct: ['company'],
+    select: { company: true },
+    where: { company: { not: null } },
+  });
+  return companies.map(c => c.company).sort();
 };
 
-exports.getUniqueCategories = (company) => {
-  let filtered = products;
+exports.getUniqueCategories = async (company) => {
+  const where = {};
   if (company) {
-    filtered = filtered.filter(p => p.company === company);
+    where.company = company;
   }
-  return [...new Set(filtered.map(p => p.category))].sort();
+  const categories = await prisma.product.findMany({
+    distinct: ['category'],
+    select: { category: true },
+    where: { ...where, category: { not: null } },
+  });
+  return categories.map(c => c.category).sort();
 };
 
-exports.getUniqueBrands = (company, category) => {
-  let filtered = products;
+exports.getUniqueBrands = async (company, category) => {
+  const where = {};
   if (company) {
-    filtered = filtered.filter(p => p.company === company);
+    where.company = company;
   }
   if (category) {
-    filtered = filtered.filter(p => p.category === category);
+    where.category = category;
   }
-  return [...new Set(filtered.map(p => p.brand))].sort();
+  const brands = await prisma.product.findMany({
+    distinct: ['brand'],
+    select: { brand: true },
+    where: { ...where, brand: { not: null } },
+  });
+  return brands.map(b => b.brand).sort();
 };
 
-exports.getUniqueSizes = (company, category, brand) => {
-  let filtered = products;
+exports.getUniqueSizes = async (company, category, brand) => {
+  const where = {};
   if (company) {
-    filtered = filtered.filter(p => p.company === company);
+    where.company = company;
   }
   if (category) {
-    filtered = filtered.filter(p => p.category === category);
+    where.category = category;
   }
   if (brand) {
-    filtered = filtered.filter(p => p.brand === brand);
+    where.brand = brand;
   }
-  return [...new Set(filtered.map(p => p.size))].sort();
+  const sizes = await prisma.product.findMany({
+    distinct: ['unitSize'],
+    select: { unitSize: true },
+    where: { ...where, unitSize: { not: null } },
+  });
+  return sizes.map(s => s.unitSize).sort();
 };
 
-exports.filterProductsByStockStatus = (status) => {
-  let filteredByStatus = [...products];
-
+exports.filterProductsByStockStatus = async (status) => {
+  let where = {};
   if (status === 'in') {
-    filteredByStatus = filteredByStatus.filter(p => p.stockQuantity > 10);
-  } else if (status === 'low') {
-    filteredByStatus = filteredByStatus.filter(p => p.stockQuantity > 0 && p.stockQuantity <= 10);
-  } else if (status === 'out') {
-    filteredByStatus = filteredByStatus.filter(p => p.stockQuantity === 0);
+    where.stockQuantity = { gt: 10 };
+  }
+  else if (status === 'low') {
+    where.stockQuantity = { gt: 0, lte: 10 };
+  }
+  else if (status === 'out') {
+    where.stockQuantity = { equals: 0 };
   }
 
-  return filteredByStatus.map(p => ({ ...p, isAvailable: p.stockQuantity > 0 }));
+  const products = await prisma.product.findMany({
+    where,
+  });
+
+  return products.map(p => ({ ...p, isAvailable: p.stockQuantity > 0 }));
 };

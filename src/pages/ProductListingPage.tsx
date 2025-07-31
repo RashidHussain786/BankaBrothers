@@ -111,8 +111,8 @@ const ProductListingPage = () => {
     setSelectedProduct(null);
   };
 
-  const handleAddToCart = (product: Product, quantity: number, note: string, itemsPerPack: number) => {
-    addToCart(product, quantity, note, itemsPerPack);
+  const handleAddToCart = (product: Product, quantity: number, itemsPerPack?: string, specialInstructions?: string) => {
+    addToCart(product, quantity, itemsPerPack, specialInstructions);
   };
 
   return (

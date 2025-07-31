@@ -20,8 +20,8 @@ export const adminService = {
         return response.json();
     },
 
-    getAllUsers: async (token: string): Promise<User[]> => {
-        const response = await fetch(`${API_BASE_URL}/admin/users`, {
+    getAllUsers: async (token: string, page: number = 1, limit: number = 10): Promise<{ users: User[], totalCount: number }> => {
+        const response = await fetch(`${API_BASE_URL}/admin/users?page=${page}&limit=${limit}`, {
             headers: {
                 'x-auth-token': token,
             },
@@ -67,8 +67,8 @@ export const adminService = {
         return response.json();
     },
 
-    getAllOrders: async (token: string): Promise<Order[]> => {
-        const response = await fetch(`${API_BASE_URL}/order`, {
+    getAllOrders: async (token: string, page: number = 1, limit: number = 10): Promise<{ orders: Order[], totalCount: number }> => {
+        const response = await fetch(`${API_BASE_URL}/order?page=${page}&limit=${limit}`, {
             headers: {
                 'x-auth-token': token,
             },

@@ -1,46 +1,81 @@
 const productService = require('../services/productService');
 
-exports.getAllProducts = (req, res) => {
+exports.getAllProducts = async (req, res) => {
   const { search, company, category, brand, size, inStockOnly, sortColumn, sortDirection, page, limit } = req.query;
-  const productsData = productService.findProducts({ search, company, category, brand, size, inStockOnly, sortColumn, sortDirection, page, limit });
-  res.json(productsData);
-};
-
-exports.getProductById = (req, res) => {
-  const productId = parseInt(req.params.id);
-  const product = productService.findProductById(productId);
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404).send('Product not found');
+  try {
+    const productsData = await productService.findProducts({ search, company, category, brand, size, inStockOnly, sortColumn, sortDirection, page, limit });
+    res.json(productsData);
+  } catch (error) {
+    console.error('Error getting all products:', error);
+    res.status(500).json({ message: 'Failed to fetch products' });
   }
 };
 
-exports.getCompanies = (req, res) => {
-  const companies = productService.getUniqueCompanies();
-  res.json(companies);
+exports.getProductById = async (req, res) => {
+  const productId = parseInt(req.params.id);
+  try {
+    const product = await productService.findProductById(productId);
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).send('Product not found');
+    }
+  } catch (error) {
+    console.error('Error getting product by ID:', error);
+    res.status(500).json({ message: 'Failed to fetch product' });
+  }
 };
 
-exports.getCategories = (req, res) => {
+exports.getCompanies = async (req, res) => {
+  try {
+    const companies = await productService.getUniqueCompanies();
+    res.json(companies);
+  } catch (error) {
+    console.error('Error getting unique companies:', error);
+    res.status(500).json({ message: 'Failed to fetch companies' });
+  }
+};
+
+exports.getCategories = async (req, res) => {
   const { company } = req.query;
-  const categories = productService.getUniqueCategories(company);
-  res.json(categories);
+  try {
+    const categories = await productService.getUniqueCategories(company);
+    res.json(categories);
+  } catch (error) {
+    console.error('Error getting unique categories:', error);
+    res.status(500).json({ message: 'Failed to fetch categories' });
+  }
 };
 
-exports.getBrands = (req, res) => {
+exports.getBrands = async (req, res) => {
   const { company, category } = req.query;
-  const brands = productService.getUniqueBrands(company, category);
-  res.json(brands);
+  try {
+    const brands = await productService.getUniqueBrands(company, category);
+    res.json(brands);
+  } catch (error) {
+    console.error('Error getting unique brands:', error);
+    res.status(500).json({ message: 'Failed to fetch brands' });
+  }
 };
 
-exports.getSizes = (req, res) => {
+exports.getSizes = async (req, res) => {
   const { company, category, brand } = req.query;
-  const sizes = productService.getUniqueSizes(company, category, brand);
-  res.json(sizes);
+  try {
+    const sizes = await productService.getUniqueSizes(company, category, brand);
+    res.json(sizes);
+  } catch (error) {
+    console.error('Error getting unique sizes:', error);
+    res.status(500).json({ message: 'Failed to fetch sizes' });
+  }
 };
 
-exports.getProductsByStockStatus = (req, res) => {
+exports.getProductsByStockStatus = async (req, res) => {
   const status = req.query.status;
-  const products = productService.filterProductsByStockStatus(status);
-  res.json(products);
+  try {
+    const products = await productService.filterProductsByStockStatus(status);
+    res.json(products);
+  } catch (error) {
+    console.error('Error getting products by stock status:', error);
+    res.status(500).json({ message: 'Failed to fetch products by stock status' });
+  }
 };

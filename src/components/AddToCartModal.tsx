@@ -6,7 +6,7 @@ interface AddToCartModalProps {
   product: Product | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart: (product: Product, quantity: number, note: string, itemsPerPack: number) => void;
+  onAddToCart: (product: Product, quantity: number, itemsPerPack?: string, specialInstructions?: string) => void;
 }
 
 const AddToCartModal: React.FC<AddToCartModalProps> = ({
@@ -16,16 +16,16 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   onAddToCart,
 }) => {
   const [quantity, setQuantity] = useState(1);
-  const [note, setNote] = useState('');
-  const [itemsPerPack, setItemsPerPack] = useState(1);
+  const [specialInstructions, setSpecialInstructions] = useState('');
+  const [itemsPerPack, setItemsPerPack] = useState('');
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && product) {
       setQuantity(1);
-      setNote('');
-      setItemsPerPack(1);
+      setSpecialInstructions('');
+      setItemsPerPack(''); // Ensure it's empty by default
     }
-  }, [isOpen]);
+  }, [isOpen, product]);
 
   if (!isOpen || !product) return null;
 
@@ -39,16 +39,11 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   };
 
   const handleItemsPerPackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 1) {
-      setItemsPerPack(value);
-    } else if (e.target.value === '') {
-      setItemsPerPack(0); // Allow empty input temporarily for user to type
-    }
+    setItemsPerPack(e.target.value);
   };
 
   const handleAddToCart = () => {
-    if (!product.isAvailable) {
+    if (!product.stockQuantity || product.stockQuantity <= 0) {
       alert('This product is out of stock.');
       return;
     }
@@ -56,15 +51,16 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
       alert('Quantity must be at least 1.');
       return;
     }
-    if (itemsPerPack < 1) {
-      alert('Items per Pack/Unit must be at least 1.');
+    // itemsPerPack is now a string, so we only check if it's provided
+    if (!itemsPerPack.trim()) {
+      alert('Items per Pack/Unit is required.');
       return;
     }
-    onAddToCart(product, quantity, note, itemsPerPack);
+    onAddToCart(product, quantity, itemsPerPack, specialInstructions);
     onClose();
   };
 
-  const isAddToCartDisabled = !product.isAvailable || quantity < 1 || itemsPerPack < 1;
+  const isAddToCartDisabled = !product.stockQuantity || product.stockQuantity <= 0 || quantity < 1 || !itemsPerPack.trim();
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
@@ -107,23 +103,23 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
           <div>
             <label htmlFor="itemsPerPack" className="block text-sm font-medium text-gray-700">Items per Pack/Unit</label>
             <input
-              type="number"
+              type="text"
               id="itemsPerPack"
-              min="1"
               value={itemsPerPack}
               onChange={handleItemsPerPackChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="e.g., 6 pcs, 1 dozen"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="note" className="block text-sm font-medium text-gray-700">Any special instructions?</label>
+          <label htmlFor="specialInstructions" className="block text-sm font-medium text-gray-700">Special Instructions</label>
           <textarea
-            id="note"
+            id="specialInstructions"
             rows={3}
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
+            value={specialInstructions}
+            onChange={(e) => setSpecialInstructions(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             placeholder="e.g., 'Deliver after 5 PM', 'Fragile item'"
           ></textarea>
@@ -134,7 +130,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
           disabled={isAddToCartDisabled}
           className={`w-full mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${isAddToCartDisabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'}`}
         >
-          {!product.isAvailable ? 'Out of Stock' : 'Add to Cart'}
+          {!product.stockQuantity || product.stockQuantity <= 0 ? 'Out of Stock' : 'Add to Cart'}
         </button>
       </div>
     </div>

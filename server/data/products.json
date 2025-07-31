@@ -7,7 +7,8 @@
     "brand": "Good Day",
     "unitSize": "200g",
     "size": "Small",
-    "stockQuantity": 25
+    "stockQuantity": 25,
+    "price": 10.00
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "brand": "Parle-G",
     "unitSize": "1kg",
     "size": "Large",
-    "stockQuantity": 8
+    "stockQuantity": 8,
+    "price": 10.00
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@
     "brand": "Lays",
     "unitSize": "50g",
     "size": "Small",
-    "stockQuantity": 0
+    "stockQuantity": 0,
+    "price": 10.00
   },
   {
     "id": 4,
@@ -37,7 +40,8 @@
     "brand": "Ghari",
     "unitSize": "1kg",
     "size": "Large",
-    "stockQuantity": 15
+    "stockQuantity": 15,
+    "price": 10.00
   },
   {
     "id": 5,
@@ -47,7 +51,8 @@
     "brand": "Dairy Milk",
     "unitSize": "60g",
     "size": "Medium",
-    "stockQuantity": 3
+    "stockQuantity": 3,
+    "price": 10.00
   },
   {
     "id": 6,
@@ -57,7 +62,8 @@
     "brand": "Marie Gold",
     "unitSize": "250g",
     "size": "Medium",
-    "stockQuantity": 18
+    "stockQuantity": 18,
+    "price": 10.00
   },
   {
     "id": 7,
@@ -67,7 +73,8 @@
     "brand": "Monaco",
     "unitSize": "200g",
     "size": "Small",
-    "stockQuantity": 5
+    "stockQuantity": 5,
+    "price": 10.00
   },
   {
     "id": 8,
@@ -77,7 +84,8 @@
     "brand": "Kurkure",
     "unitSize": "100g",
     "size": "Small",
-    "stockQuantity": 12
+    "stockQuantity": 12,
+    "price": 10.00
   },
   {
     "id": 9,
@@ -87,7 +95,8 @@
     "brand": "Surf Excel",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 0
+    "stockQuantity": 0,
+    "price": 10.00
   },
   {
     "id": 10,
@@ -97,7 +106,8 @@
     "brand": "Kit Kat",
     "unitSize": "37.3g",
     "size": "Small",
-    "stockQuantity": 22
+    "stockQuantity": 22,
+    "price": 10.00
   },
   {
     "id": 11,
@@ -107,7 +117,8 @@
     "brand": "Tiger",
     "unitSize": "300g",
     "size": "Medium",
-    "stockQuantity": 7
+    "stockQuantity": 7,
+    "price": 10.00
   },
   {
     "id": 12,
@@ -117,7 +128,8 @@
     "brand": "Hide & Seek",
     "unitSize": "100g",
     "size": "Small",
-    "stockQuantity": 14
+    "stockQuantity": 14,
+    "price": 10.00
   },
   {
     "id": 13,
@@ -127,7 +139,8 @@
     "brand": "Cheetos",
     "unitSize": "75g",
     "size": "Small",
-    "stockQuantity": 1
+    "stockQuantity": 1,
+    "price": 10.00
   },
   {
     "id": 14,
@@ -137,7 +150,8 @@
     "brand": "Ariel",
     "unitSize": "1kg",
     "size": "Large",
-    "stockQuantity": 9
+    "stockQuantity": 9,
+    "price": 10.00
   },
   {
     "id": 15,
@@ -147,7 +161,8 @@
     "brand": "5 Star",
     "unitSize": "45g",
     "size": "Small",
-    "stockQuantity": 16
+    "stockQuantity": 16,
+    "price": 10.00
   },
   {
     "id": 16,
@@ -157,7 +172,8 @@
     "brand": "Bhujia",
     "unitSize": "200g",
     "size": "Medium",
-    "stockQuantity": 11
+    "stockQuantity": 11,
+    "price": 10.00
   },
   {
     "id": 17,
@@ -167,7 +183,8 @@
     "brand": "Tide",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 4
+    "stockQuantity": 4,
+    "price": 10.00
   },
   {
     "id": 18,
@@ -177,7 +194,8 @@
     "brand": "Oreo",
     "unitSize": "120g",
     "size": "Small",
-    "stockQuantity": 19
+    "stockQuantity": 19,
+    "price": 10.00
   },
   {
     "id": 19,
@@ -187,7 +205,8 @@
     "brand": "Ferrero Rocher",
     "unitSize": "200g",
     "size": "Medium",
-    "stockQuantity": 6
+    "stockQuantity": 6,
+    "price": 10.00
   },
   {
     "id": 20,
@@ -197,7 +216,8 @@
     "brand": "Uncle Chips",
     "unitSize": "55g",
     "size": "Small",
-    "stockQuantity": 0
+    "stockQuantity": 0,
+    "price": 10.00
   },
   {
     "id": 21,
@@ -207,7 +227,8 @@
     "brand": "Perk",
     "unitSize": "30g",
     "size": "Small",
-    "stockQuantity": 20
+    "stockQuantity": 20,
+    "price": 10.00
   },
   {
     "id": 22,
@@ -217,7 +238,8 @@
     "brand": "Tata Tea",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 10
+    "stockQuantity": 10,
+    "price": 10.00
   },
   {
     "id": 23,
@@ -227,7 +249,8 @@
     "brand": "Boost",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 7
+    "stockQuantity": 7,
+    "price": 10.00
   },
   {
     "id": 24,
@@ -237,7 +260,8 @@
     "brand": "Pepsi",
     "unitSize": "1.25L",
     "size": "Large",
-    "stockQuantity": 13
+    "stockQuantity": 13,
+    "price": 10.00
   },
   {
     "id": 25,
@@ -247,7 +271,8 @@
     "brand": "Nescafe",
     "unitSize": "100g",
     "size": "Small",
-    "stockQuantity": 6
+    "stockQuantity": 6,
+    "price": 10.00
   },
   {
     "id": 26,
@@ -257,7 +282,8 @@
     "brand": "Bournvita",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 5
+    "stockQuantity": 5,
+    "price": 10.00
   },
   {
     "id": 27,
@@ -267,7 +293,8 @@
     "brand": "Sunfeast",
     "unitSize": "75g",
     "size": "Small",
-    "stockQuantity": 9
+    "stockQuantity": 9,
+    "price": 10.00
   },
   {
     "id": 28,
@@ -277,7 +304,8 @@
     "brand": "Milkmaid",
     "unitSize": "400g",
     "size": "Medium",
-    "stockQuantity": 4
+    "stockQuantity": 4,
+    "price": 10.00
   },
   {
     "id": 29,
@@ -287,7 +315,8 @@
     "brand": "Amul",
     "unitSize": "500g",
     "size": "Medium",
-    "stockQuantity": 12
+    "stockQuantity": 12,
+    "price": 10.00
   },
   {
     "id": 30,
@@ -297,6 +326,7 @@
     "brand": "Maggi",
     "unitSize": "70g",
     "size": "Small",
-    "stockQuantity": 30
+    "stockQuantity": 30,
+    "price": 10.00
   }
 ]

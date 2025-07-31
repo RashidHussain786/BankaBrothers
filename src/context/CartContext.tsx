@@ -3,9 +3,9 @@ import { CartItem, Product } from '../types';
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (product: Product, quantity: number, note: string, itemsPerPack: number) => void;
-  removeFromCart: (productId: number, note: string, itemsPerPack: number) => void;
-  updateCartItemQuantity: (productId: number, newQuantity: number, note: string, itemsPerPack: number) => void;
+  addToCart: (product: Product, quantity: number, itemsPerPack?: string, specialInstructions?: string) => void;
+  removeFromCart: (productId: number, itemsPerPack?: string, specialInstructions?: string) => void;
+  updateCartItemQuantity: (productId: number, newQuantity: number, itemsPerPack?: string, specialInstructions?: string) => void;
   clearCart: () => void;
   totalItemsInCart: number;
 }
@@ -29,10 +29,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product: Product, quantity: number, note: string, itemsPerPack: number) => {
+  const addToCart = (product: Product, quantity: number, itemsPerPack?: string, specialInstructions?: string) => {
     setCartItems((prevItems) => {
       const existingItemIndex = prevItems.findIndex(
-        (item) => item.id === product.id && item.itemsPerPack === itemsPerPack
+        (item) => item.id === product.id && item.itemsPerPack === itemsPerPack && item.specialInstructions === specialInstructions
       );
 
       if (existingItemIndex > -1) {
@@ -40,23 +40,23 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updatedItems[existingItemIndex].quantity += quantity;
         return updatedItems;
       } else {
-        return [...prevItems, { ...product, quantity, note, itemsPerPack }];
+        return [...prevItems, { ...product, quantity, itemsPerPack, specialInstructions }];
       }
     });
   };
 
-  const removeFromCart = (productId: number, note: string, itemsPerPack: number) => {
+  const removeFromCart = (productId: number, itemsPerPack?: string, specialInstructions?: string) => {
     setCartItems((prevItems) =>
       prevItems.filter(
-        (item) => !(item.id === productId && item.note === note && item.itemsPerPack === itemsPerPack)
+        (item) => !(item.id === productId && item.itemsPerPack === itemsPerPack && item.specialInstructions === specialInstructions)
       )
     );
   };
 
-  const updateCartItemQuantity = (productId: number, newQuantity: number, note: string, itemsPerPack: number) => {
+  const updateCartItemQuantity = (productId: number, newQuantity: number, itemsPerPack?: string, specialInstructions?: string) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === productId && item.note === note && item.itemsPerPack === itemsPerPack
+        item.id === productId && item.itemsPerPack === itemsPerPack && item.specialInstructions === specialInstructions
           ? { ...item, quantity: newQuantity }
           : item
       )

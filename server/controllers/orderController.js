@@ -1,14 +1,14 @@
 const orderService = require('../services/orderService');
 
-exports.createOrder = (req, res) => {
-  const { userId, cartItems, customerInfo } = req.body;
+exports.createOrder = async (req, res) => {
+  const { userId, cartItems, customerId } = req.body;
 
-  if (!userId || !cartItems || cartItems.length === 0 || !customerInfo) {
-    return res.status(400).json({ message: 'User ID, cart items, and customer info are required' });
+  if (!userId || !cartItems || cartItems.length === 0 || !customerId) {
+    return res.status(400).json({ message: 'User ID, cart items, and customer ID are required' });
   }
 
   try {
-    const newOrder = orderService.createOrder(userId, cartItems, customerInfo);
+    const newOrder = await orderService.createOrder(userId, cartItems, customerId); // Await
     res.status(201).json(newOrder);
   } catch (error) {
     console.error('Error creating order:', error);
@@ -16,7 +16,7 @@ exports.createOrder = (req, res) => {
   }
 };
 
-exports.updateOrderStatus = (req, res) => {
+exports.updateOrderStatus = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
@@ -27,7 +27,7 @@ exports.updateOrderStatus = (req, res) => {
   }
 
   try {
-    const updatedOrder = orderService.updateOrderStatus(id, status);
+    const updatedOrder = await orderService.updateOrderStatus(id, status); // Await
     res.json(updatedOrder);
   } catch (error) {
     console.error(`Error updating order status for order ${id}:`, error);
@@ -38,10 +38,12 @@ exports.updateOrderStatus = (req, res) => {
   }
 };
 
-exports.getAllOrders = (req, res) => {
+exports.getAllOrders = async (req, res) => {
   try {
-    const orders = orderService.getAllOrders();
-    res.json(orders);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const { orders, totalCount } = await orderService.getAllOrders(page, limit); // Await
+    res.json({ orders, totalCount });
   } catch (error) {
     console.error('Error getting all orders:', error);
     res.status(500).json({ message: 'Internal server error' });

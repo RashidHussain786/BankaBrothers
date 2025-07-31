@@ -1,23 +1,30 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminService } from '../services/adminService';
 import { useAuth } from '../context/AuthContext';
 import { User } from '../types';
 import { Link } from 'react-router-dom';
 import EditUserModal from '../components/EditUserModal';
+import Pagination from '../components/Pagination';
+import ItemsPerPageSelector from '../components/ItemsPerPageSelector';
 
 const AdminUserManagementPage: React.FC = () => {
   const { token } = useAuth();
   const queryClient = useQueryClient();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const { data: users, isLoading, error } = useQuery<User[], Error>({
-    queryKey: ['users'],
-    queryFn: () => adminService.getAllUsers(token!),
+  const { data, isLoading, error } = useQuery<{ users: User[], totalCount: number }, Error>({
+    queryKey: ['users', currentPage, itemsPerPage],
+    queryFn: () => adminService.getAllUsers(token!, currentPage, itemsPerPage),
     enabled: !!token,
   });
+
+  const users = data?.users;
+  const totalCount = data?.totalCount || 0;
 
   const deleteUserMutation = useMutation({
     mutationFn: (userId: string) => adminService.deleteUser(userId, token!),
@@ -57,6 +64,31 @@ const AdminUserManagementPage: React.FC = () => {
     updateUserMutation.mutate({ userId, role });
   };
 
+  // Reset current page if itemsPerPage changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage]);
+
+  // If current page is empty but there are total results, reset to page 1
+  useEffect(() => {
+    if (!isLoading && users && users.length === 0 && totalCount > 0 && currentPage > 1) {
+      setCurrentPage(1);
+    }
+  }, [users, totalCount, isLoading, currentPage]);
+
+  // Prefetch next page
+  useEffect(() => {
+    const totalPages = Math.ceil(totalCount / itemsPerPage);
+    const nextPage = currentPage + 1;
+
+    if (nextPage <= totalPages) {
+      queryClient.prefetchQuery({
+        queryKey: ['users', nextPage, itemsPerPage],
+        queryFn: () => adminService.getAllUsers(token!, nextPage, itemsPerPage),
+      });
+    }
+  }, [currentPage, itemsPerPage, totalCount, queryClient, token]);
+
   if (isLoading) {
     return <div className="container mx-auto px-4 py-8">Loading users...</div>;
   }
@@ -69,12 +101,18 @@ const AdminUserManagementPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">User Management</h1>
-        <Link
-          to="/admin/create-user"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm"
-        >
-          Add User
-        </Link>
+        <div className="flex items-center space-x-4">
+          <ItemsPerPageSelector
+            itemsPerPage={itemsPerPage}
+            onItemsPerPageChange={setItemsPerPage}
+          />
+          <Link
+            to="/admin/create-user"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm"
+          >
+            Add User
+          </Link>
+        </div>
       </div>
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
@@ -126,6 +164,13 @@ const AdminUserManagementPage: React.FC = () => {
           </tbody>
         </table>
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalCount / itemsPerPage)}
+        onPageChange={setCurrentPage}
+        totalItems={totalCount}
+        itemsPerPage={itemsPerPage}
+      />
       <EditUserModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}

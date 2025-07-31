@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  passwordHash String   @map("password_hash")
+  role        String   @default("user")
+  orders      Order[] // Relation to Order model
+
+  @@map("users") // Map model name to table name if different
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // Assuming name is unique for upsert operations
+  company     String?
+  category    String?
+  brand       String?
+  unitSize    String?  @map("unit_size")
+  price       Decimal
+  stockQuantity Int?   @map("stock_quantity")
+  orderItems  OrderItem[] // Relation to OrderItem model
+
+  @@map("products")
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  mobile    String   @unique // Assuming mobile number is unique for a customer
+  address   String?
+  shopName  String?  @unique @map("shop_name")
+  orders    Order[] // Relation to Order model
+
+  @@map("customers")
+}
+
+model Order {
+  orderId     Int      @id @default(autoincrement()) @map("order_id")
+  userId      Int      @map("user_id")
+  customerId  Int      @map("customer_id") // New foreign key to Customer
+  createdAt   DateTime @default(now()) @map("created_at")
+  status      String   @default("pending")
+  user        User     @relation(fields: [userId], references: [id])
+  customer    Customer @relation(fields: [customerId], references: [id]) // Relation to Customer model
+  orderItems  OrderItem[] // Relation to OrderItem model
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          Int      @id @default(autoincrement())
+  orderId     Int      @map("order_id")
+  productId   Int      @map("product_id")
+  quantity    Int
+  priceAtOrder Decimal @map("price_at_order") // Price of the product at the time of order
+  itemsPerPack String? @map("items_per_pack")
+  specialInstructions String? @map("special_instructions")
+
+  order       Order    @relation(fields: [orderId], references: [orderId])
+  product     Product  @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}

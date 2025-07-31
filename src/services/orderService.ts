@@ -3,7 +3,7 @@ import { OrderData } from '../types';
 import { API_BASE_URL } from '../config';
 
 export const orderService = {
-  async submitOrder(orderData: OrderData, token: string) {
+  async submitOrder(orderData: Omit<OrderData, 'customerDetails'>, token: string) {
     const response = await fetch(`${API_BASE_URL}/order`, {
       method: 'POST',
       headers: {

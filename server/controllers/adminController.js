@@ -18,8 +18,10 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await userService.getAllUsers();
-    res.json(users);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const { users, totalCount } = await userService.getAllUsers(page, limit);
+    res.json({ users, totalCount });
   } catch (error) {
     console.error('Error getting all users:', error);
     res.status(500).json({ message: 'Internal server error' });

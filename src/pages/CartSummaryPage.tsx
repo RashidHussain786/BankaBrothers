@@ -1,61 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../hooks/useCart';
 import { Link } from 'react-router-dom';
 import { Trash2, PlusCircle, MinusCircle, ShoppingCart } from 'lucide-react';
 import { orderService } from '../services/orderService';
 import { OrderData } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { getAllCustomers } from '../services/customerService';
+import { Customer } from '../types/customer';
+import AddCustomerModal from '../components/AddCustomerModal';
 
 const CartSummaryPage: React.FC = () => {
   const { cartItems, removeFromCart, updateCartItemQuantity, totalItemsInCart, clearCart } = useCart();
   const { token, user } = useAuth();
 
-  const [customerName, setCustomerName] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [deliveryAddress, setDeliveryAddress] = useState('');
-  const [preferredDeliveryTime, setPreferredDeliveryTime] = useState('');
-  const [additionalNote, setAdditionalNote] = useState('');
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+  const [selectedCustomerDetails, setSelectedCustomerDetails] = useState<Customer | null>(null);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const [isAddCustomerModalOpen, setIsAddCustomerModalOpen] = useState(false);
 
-  const [errors, setErrors] = useState({
-    name: '',
-    mobile: '',
-    address: '',
-  });
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
 
-  const validateForm = () => {
-    const newErrors = { name: '', mobile: '', address: '' };
-    let isValid = true;
-
-    if (!customerName.trim()) {
-      newErrors.name = 'Name is required';
-      isValid = false;
+  const fetchCustomers = async () => {
+    try {
+      const { customers: fetchedCustomers } = await getAllCustomers();
+      setCustomers(fetchedCustomers);
+      setFilteredCustomers(fetchedCustomers); // Initialize filtered customers with all customers
+    } catch (error) {
+      console.error('Error fetching customers:', error);
     }
-
-    if (!mobileNumber.trim()) {
-      newErrors.mobile = 'Mobile number is required';
-      isValid = false;
-    } else if (!/^[0-9]{10}$/.test(mobileNumber)) {
-      newErrors.mobile = 'Mobile number must be 10 digits';
-      isValid = false;
-    }
-
-    if (!deliveryAddress.trim()) {
-      newErrors.address = 'Delivery address is required';
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
   };
 
-  const handleQuantityChange = (productId: number, newQuantity: number, note: string, itemsPerPack: number) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    if (term.length > 0) {
+      setFilteredCustomers(
+        customers.filter(
+          (customer) =>
+            customer.shopName?.toLowerCase().includes(term.toLowerCase()) ||
+            customer.name.toLowerCase().includes(term.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredCustomers(customers);
+    }
+  };
+
+  const handleCustomerSelect = (customer: Customer) => {
+    setSelectedCustomerId(customer.id);
+    setSelectedCustomerDetails(customer);
+    setSearchTerm(customer.shopName || customer.name); // Display selected customer's name in search box
+    setFilteredCustomers([]); // Clear filtered results
+  };
+
+  const handleAddCustomerSuccess = () => {
+    fetchCustomers(); // Re-fetch customers after a new one is added
+    setIsAddCustomerModalOpen(false);
+  };
+
+  const handleQuantityChange = (productId: number, newQuantity: number, itemsPerPack?: string, specialInstructions?: string) => {
     if (newQuantity < 1) return;
-    updateCartItemQuantity(productId, newQuantity, note, itemsPerPack);
+    updateCartItemQuantity(productId, newQuantity, itemsPerPack, specialInstructions);
   };
-
-
 
   const handlePlaceOrder = async () => {
     if (cartItems.length === 0) {
@@ -63,42 +75,39 @@ const CartSummaryPage: React.FC = () => {
       return;
     }
 
-    if (validateForm()) {
-        if (!user?.id) {
-          alert('User not authenticated. Please log in to place an order.');
-          return;
-        }
-      const orderData: OrderData = {
-        userId: user?.id, // Add userId here
-        customerInfo: {
-          name: customerName,
-          mobile: mobileNumber,
-          address: deliveryAddress,
-          deliveryTime: preferredDeliveryTime,
-          additionalNote: additionalNote,
-        },
-        cartItems: cartItems.map(item => ({
-          id: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          unitSize: item.unitSize,
-          itemsPerPack: item.itemsPerPack,
-          note: item.note,
-        })),
-      };
+    if (!selectedCustomerId) {
+      alert('Please select a customer.');
+      return;
+    }
 
-      try {
-        if (!token) {
-          throw new Error('Authentication token not found.');
-        }
-        const result = await orderService.submitOrder(orderData, token);
-        setOrderId(result.orderId);
-        setOrderPlaced(true);
-        clearCart();
-      } catch (error) {
-        console.error('Error placing order:', error);
-        alert(`Failed to place order: ${error}`);
+    if (!user?.id) {
+      alert('User not authenticated. Please log in to place an order.');
+      return;
+    }
+
+    const orderData: OrderData = {
+      userId: user.id,
+      customerId: selectedCustomerId,
+      cartItems: cartItems.map(item => ({
+        productId: item.id,
+        quantity: item.quantity,
+        priceAtOrder: item.price,
+        itemsPerPack: item.itemsPerPack,
+        specialInstructions: item.specialInstructions,
+      })),
+    };
+
+    try {
+      if (!token) {
+        throw new Error('Authentication token not found.');
       }
+      const result = await orderService.submitOrder(orderData, token);
+      setOrderId(result.orderId);
+      setOrderPlaced(true);
+      clearCart();
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert(`Failed to place order: ${error}`);
     }
   };
 
@@ -141,17 +150,17 @@ const CartSummaryPage: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">Cart Items ({totalItemsInCart})</h2>
               <div className="divide-y divide-gray-200">
                 {cartItems.map((item) => (
-                  <div key={`${item.id}-${item.note}-${item.itemsPerPack}`} className="flex items-center py-4">
-                    
+                  <div key={`${item.id}-${item.specialInstructions}-${item.itemsPerPack}`} className="flex items-center py-4">
+
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
                       <p className="text-sm text-gray-600">{item.company} - {item.unitSize}</p>
-                      {item.note && <p className="text-sm text-gray-500 italic">Note: {item.note}</p>}
+                      {item.specialInstructions && <p className="text-sm text-gray-500 italic">Instructions: {item.specialInstructions}</p>}
                       <p className="text-sm text-gray-500">Items per Pack: {item.itemsPerPack}</p>
                     </div>
                     <div className="flex items-center space-x-2 ml-4">
                       <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity - 1, item.note || '', item.itemsPerPack)}
+                        onClick={() => handleQuantityChange(item.id, item.quantity - 1, item.itemsPerPack, item.specialInstructions)}
                         className="text-gray-600 hover:text-gray-800"
                         disabled={item.quantity <= 1}
                       >
@@ -159,13 +168,13 @@ const CartSummaryPage: React.FC = () => {
                       </button>
                       <span className="text-lg font-medium text-gray-900">{item.quantity}</span>
                       <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity + 1, item.note || '', item.itemsPerPack)}
+                        onClick={() => handleQuantityChange(item.id, item.quantity + 1, item.itemsPerPack, item.specialInstructions)}
                         className="text-gray-600 hover:text-gray-800"
                       >
                         <PlusCircle className="h-6 w-6" />
                       </button>
                       <button
-                        onClick={() => removeFromCart(item.id, item.note || '', item.itemsPerPack)}
+                        onClick={() => removeFromCart(item.id, item.itemsPerPack, item.specialInstructions)}
                         className="text-red-600 hover:text-red-800 ml-4"
                       >
                         <Trash2 className="h-6 w-6" />
@@ -177,65 +186,50 @@ const CartSummaryPage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-1 bg-white p-6 rounded-lg shadow-md border border-gray-200 h-fit">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">Customer Information</h2>
-              <form className="space-y-4">
-                <div>
-                  <label htmlFor="customerName" className="block text-sm font-medium text-gray-700">Name <span className="text-red-500">*</span></label>
-                  <input
-                    type="text"
-                    id="customerName"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  />
-                  {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">Select Customer</h2>
+              <div className="space-y-4">
+                <div className="relative">
+                  <label htmlFor="customerSearch" className="block text-sm font-medium text-gray-700">Search Customer by Shop Name or Name</label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      id="customerSearch"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Search by shop name or customer name"
+                    />
+                    <button
+                      onClick={() => setIsAddCustomerModalOpen(true)}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 text-sm whitespace-nowrap"
+                    >
+                      Add New
+                    </button>
+                  </div>
+                  {searchTerm && filteredCustomers.length > 0 && (
+                    <div className="absolute z-10 bg-white border border-gray-300 w-full rounded-md shadow-lg max-h-60 overflow-y-auto mt-1">
+                      {filteredCustomers.map((customer) => (
+                        <div
+                          key={customer.id}
+                          className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleCustomerSelect(customer)}
+                        >
+                          {customer.shopName} ({customer.name})
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <label htmlFor="mobileNumber" className="block text-sm font-medium text-gray-700">Mobile Number <span className="text-red-500">*</span></label>
-                  <input
-                    type="tel"
-                    id="mobileNumber"
-                    value={mobileNumber}
-                    onChange={(e) => setMobileNumber(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    maxLength={10}
-                  />
-                  {errors.mobile && <p className="mt-1 text-sm text-red-600">{errors.mobile}</p>}
-                </div>
-                <div>
-                  <label htmlFor="deliveryAddress" className="block text-sm font-medium text-gray-700">Delivery Address <span className="text-red-500">*</span></label>
-                  <textarea
-                    id="deliveryAddress"
-                    rows={3}
-                    value={deliveryAddress}
-                    onChange={(e) => setDeliveryAddress(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  ></textarea>
-                  {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address}</p>}
-                </div>
-                <div>
-                  <label htmlFor="preferredDeliveryTime" className="block text-sm font-medium text-gray-700">Preferred Delivery Time (Optional)</label>
-                  <input
-                    type="text"
-                    id="preferredDeliveryTime"
-                    value={preferredDeliveryTime}
-                    onChange={(e) => setPreferredDeliveryTime(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    placeholder="e.g., 9 AM - 12 PM"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="additionalNote" className="block text-sm font-medium text-gray-700">Additional Note (Optional)</label>
-                  <textarea
-                    id="additionalNote"
-                    rows={3}
-                    value={additionalNote}
-                    onChange={(e) => setAdditionalNote(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    placeholder="e.g., 'Leave at the door', 'Call before arriving'"
-                  ></textarea>
-                </div>
-              </form>
+                {selectedCustomerDetails && (
+                  <div className="mt-4 p-4 border border-gray-200 rounded-md bg-gray-50">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Customer Details:</h3>
+                    <p className="text-sm text-gray-700"><strong>Name:</strong> {selectedCustomerDetails.name}</p>
+                    <p className="text-sm text-gray-700"><strong>Mobile:</strong> {selectedCustomerDetails.mobile}</p>
+                    <p className="text-sm text-gray-700"><strong>Address:</strong> {selectedCustomerDetails.address || 'N/A'}</p>
+                    <p className="text-sm text-gray-700"><strong>Shop Name:</strong> {selectedCustomerDetails.shopName || 'N/A'}</p>
+                  </div>
+                )}
+              </div>
 
               <button
                 onClick={handlePlaceOrder}
@@ -255,6 +249,13 @@ const CartSummaryPage: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {isAddCustomerModalOpen && (
+        <AddCustomerModal
+          onClose={() => setIsAddCustomerModalOpen(false)}
+          onCustomerAdded={handleAddCustomerSuccess}
+        />
+      )}
     </div>
   );
 };

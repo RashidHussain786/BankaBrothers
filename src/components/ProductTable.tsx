@@ -19,8 +19,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
   onOrderClick
 }) => {
   const { isAdmin } = useAuth();
-  const getStockStatus = (stockQuantity: number) => {
-    if (stockQuantity === 0) {
+  const getStockStatus = (stockQuantity: number | null | undefined) => {
+    if (stockQuantity === null || stockQuantity === undefined || stockQuantity === 0) {
       return { text: 'Out of Stock', color: 'text-red-600 bg-red-50' };
     } else if (stockQuantity <= 10) {
       return { text: 'Low Stock', color: 'text-amber-600 bg-amber-50' };
