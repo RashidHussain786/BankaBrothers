@@ -35,7 +35,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onOrderClick }) => {
           </h3>
           <div className="flex items-center justify-between">
             <p className="text-xs md:text-sm text-gray-600 font-medium">{product.company}</p>
-            <p className="text-lg font-bold text-gray-800">₹{variant.price.toFixed(2)}</p>
+            <p className="text-lg font-bold text-gray-800">₹{Number(variant.price).toFixed(2)}</p>
           </div>
         </div>
 

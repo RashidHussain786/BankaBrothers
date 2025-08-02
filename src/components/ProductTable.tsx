@@ -134,7 +134,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, sortColumn, sortD
                     <div className="text-sm text-gray-900 font-medium">{item.variant.unitSize}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 font-medium">₹{item.variant.price.toFixed(2)}</div>
+                    <div className="text-sm text-gray-900 font-medium">₹{Number(item.variant.price).toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${stockStatus.color}`}>
