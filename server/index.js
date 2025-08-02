@@ -1,5 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
@@ -11,8 +14,19 @@ const customerRoutes = require('./routes/customerRoutes');
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
-app.use(express.json());
+const allowedOrigin =
+  process.env.NODE_ENV === 'production'
+    ? 'https://bankabrothers.netlify.app'
+    : process.env.CORS_ORIGIN || 'http://localhost:3000';
+
+app.use(
+  cors({
+    origin: allowedOrigin,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
 
 // Use API routes
 app.use('/api/products', productRoutes);
