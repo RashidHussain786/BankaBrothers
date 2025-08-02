@@ -1,13 +1,20 @@
 import { SortableColumn, SortDirection } from './sorting';
 
+export interface ProductVariant {
+  id: number;
+  productId: number;
+  unitSize: string;
+  price: number;
+  stockQuantity: number;
+}
+
 export interface Product {
   id: number;
   name: string;
   company?: string;
   category?: string;
-  unitSize?: string;
-  price: number;
-  stockQuantity?: number | null;
+  brand?: string;
+  variant: ProductVariant;
 }
 
 export interface ProductQueryParams {

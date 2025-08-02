@@ -30,8 +30,8 @@ const EditCustomerModal = ({ customer, onClose, onCustomerUpdated }: EditCustome
       await updateCustomer(customer.id, { name, mobile, address, shopName });
       onCustomerUpdated();
       onClose();
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
     }
   };
 

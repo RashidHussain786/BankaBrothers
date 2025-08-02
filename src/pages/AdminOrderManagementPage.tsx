@@ -8,11 +8,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AlertCircle } from 'lucide-react';
 import Pagination from '../components/Pagination';
 import ItemsPerPageSelector from '../components/ItemsPerPageSelector';
+import ColumnSelector from '../components/ColumnSelector';
 
 const AdminOrderManagementPage: React.FC = () => {
   const { token } = useAuth();
   const queryClient = useQueryClient();
-  const [notifiedOrderIds, setNotifiedOrderIds] = useState<Set<number>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -24,6 +24,33 @@ const AdminOrderManagementPage: React.FC = () => {
 
   const orders = data?.orders;
   const totalCount = data?.totalCount || 0;
+
+  const allColumns = [
+    { key: 'shopName', label: 'Shop Name' },
+    { key: 'orderId', label: 'Order ID' },
+    { key: 'customerName', label: 'Customer Name' },
+    { key: 'mobile', label: 'Mobile' },
+    { key: 'address', label: 'Address' },
+    { key: 'items', label: 'Items' },
+    { key: 'itemsPerPack', label: 'Items per Pack' },
+    { key: 'specialInstructions', label: 'Special Instructions' },
+    { key: 'timestamp', label: 'Timestamp' },
+    { key: 'status', label: 'Status' },
+    { key: 'actions', label: 'Actions' },
+  ];
+
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([
+    'shopName',
+    'orderId',
+    'mobile',
+    'address',
+    'items',
+    'itemsPerPack',
+    'specialInstructions',
+    'timestamp',
+    'status',
+    'actions',
+  ]);
 
   const updateOrderStatusMutation = useMutation({
     mutationFn: ({ orderId, status }: { orderId: number; status: 'pending' | 'completed' }) =>
@@ -41,37 +68,6 @@ const AdminOrderManagementPage: React.FC = () => {
     console.log(`Attempting to update order ${orderId} to status: ${newStatus}`);
     updateOrderStatusMutation.mutate({ orderId, status: newStatus });
   };
-
-  useEffect(() => {
-    if (orders) {
-      setNotifiedOrderIds(prevNotifiedOrderIds => {
-        const newNotifiedOrderIds = new Set(prevNotifiedOrderIds);
-        orders.forEach(order => {
-          if (order.status === 'pending' && !newNotifiedOrderIds.has(order.orderId)) {
-            newNotifiedOrderIds.add(order.orderId);
-            if (!toast.isActive(`order-${order.orderId}`)) {
-              toast.info(
-                <div className="flex flex-col">
-                  <p className="font-bold">New Order Received!</p>
-                  <p>Order ID: {order.orderId}</p>
-                  <p>User ID: {order.userId}</p>
-                  <p>Items: {order.orderItems?.map(item => item.product?.name || 'Unknown Product').join(', ')}</p>
-                </div>,
-                {
-                  toastId: `order-${order.orderId}`,
-                  autoClose: 5000,
-                }
-              );
-            }
-          } else if (order.status === 'completed' && newNotifiedOrderIds.has(order.orderId)) {
-            newNotifiedOrderIds.delete(order.orderId);
-            toast.dismiss(`order-${order.orderId}`);
-          }
-        });
-        return newNotifiedOrderIds;
-      });
-    }
-  }, [orders]);
 
   // Reset current page if itemsPerPage changes
   useEffect(() => {
@@ -100,77 +96,73 @@ const AdminOrderManagementPage: React.FC = () => {
         <h2 className="text-xl font-semibold text-gray-900">
           Total Orders ({totalCount})
         </h2>
+        <div className="flex items-center space-x-4">
         <ItemsPerPageSelector
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={setItemsPerPage}
         />
+        <ColumnSelector
+            columns={allColumns}
+            selectedColumns={selectedColumns}
+            onColumnChange={setSelectedColumns}
+          />
+        </div>
       </div>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        {orders && orders.length > 0 ? ( // Check if orders exist before rendering table
+      <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+        {orders && orders.length > 0 ? (
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shop Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mobile</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items per Pack</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Special Instructions</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                {allColumns.filter(c => selectedColumns.includes(c.key)).map(column => (
+                    <th key={column.key} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        {column.label}
+                    </th>
+                ))}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            {orders.sort((a, b) => {
-              if (a.status === 'pending' && b.status !== 'pending') return -1;
-              if (a.status !== 'pending' && b.status === 'pending') return 1;
-              return 0;
-            }).map((order) => (
+              {orders.sort((a, b) => {
+                if (a.status === 'pending' && b.status !== 'pending') return -1;
+                if (a.status !== 'pending' && b.status === 'pending') return 1;
+                return 0;
+              }).map((order) => (
                 <tr key={order.orderId}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.customer?.shopName}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.customer?.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.customer?.mobile}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.customer?.address}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {/* Access order items from order.orderItems */}
-                    {order.orderItems?.map(item => (
-                      <div key={item.id}>
-                        {item.product?.name || 'Unknown Product'} (x{item.quantity})
-                        {item.priceAtOrder && <span className="text-xs text-gray-400"> ₹ {item.priceAtOrder.toFixed(2)}</span>}
-                      </div>
-                    ))}
-                    {order.orderItems && order.orderItems.length > 0 && (
-                      <div className="pt-2 mt-2 border-t border-gray-200 text-gray-700 font-semibold">
-                        Total: {order.orderItems.reduce((sum, item) => sum + item.quantity, 0)} units, ₹ {order.orderItems.reduce((sum, item) => sum + (item.priceAtOrder * item.quantity), 0).toFixed(2)}
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.orderItems?.map(item => (
-                      <div key={item.id}>
-                        {item.itemsPerPack || 'N/A'}
-                      </div>
-                    ))}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.orderItems?.map(item => (
-                      <div key={item.id}>
-                        {item.specialInstructions || 'N/A'}
-                      </div>
-                    ))}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.status}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <input
-                      type="checkbox"
-                      checked={order.status === 'completed'}
-                      onChange={() => handleStatusChange(order.orderId, order.status)}
-                      className="form-checkbox h-5 w-5 text-blue-600"
-                    />
-                  </td>
+                  {allColumns.filter(c => selectedColumns.includes(c.key)).map(column => (
+                    <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {column.key === 'shopName' && order.customer?.shopName}
+                      {column.key === 'orderId' && order.orderId}
+                      {column.key === 'customerName' && order.customer?.name}
+                      {column.key === 'mobile' && order.customer?.mobile}
+                      {column.key === 'address' && order.customer?.address}
+                      {column.key === 'items' && (
+                        <>
+                          {order.orderItems?.map(item => (
+                            <div key={item.id}>
+                              {item.product?.name || 'Unknown Product'} (x{item.quantity})
+                              {item.priceAtOrder && <span className="text-xs text-gray-400"> ₹ {item.priceAtOrder.toFixed(2)}</span>}
+                            </div>
+                          ))}
+                          {order.orderItems && order.orderItems.length > 0 && (
+                            <div className="pt-2 mt-2 border-t border-gray-200 text-gray-700 font-semibold">
+                              Total: {order.orderItems.reduce((sum, item) => sum + item.quantity, 0)} units, ₹ {order.orderItems.reduce((sum, item) => sum + (item.priceAtOrder * item.quantity), 0).toFixed(2)}
+                            </div>
+                          )}
+                        </>
+                      )}
+                      {column.key === 'itemsPerPack' && order.orderItems?.map(item => <div key={item.id}>{item.itemsPerPack || 'N/A'}</div>)}
+                      {column.key === 'specialInstructions' && order.orderItems?.map(item => <div key={item.id}>{item.specialInstructions || 'N/A'}</div>)}
+                      {column.key === 'timestamp' && new Date(order.createdAt).toLocaleDateString()}
+                      {column.key === 'status' && order.status}
+                      {column.key === 'actions' && (
+                        <input
+                          type="checkbox"
+                          checked={order.status === 'completed'}
+                          onChange={() => handleStatusChange(order.orderId, order.status)}
+                          className="form-checkbox h-5 w-5 text-blue-600"
+                        />
+                      )}
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>

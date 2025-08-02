@@ -63,9 +63,9 @@ const CustomerManagementPage = () => {
       try {
         await deleteCustomer(customerId);
         queryClient.invalidateQueries({ queryKey: ['customers', currentPage, itemsPerPage] });
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Error deleting customer:', error);
-        alert(error.message);
+        alert(error instanceof Error ? error.message : 'An unknown error occurred');
       }
     }
   };

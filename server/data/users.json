@@ -12,12 +12,8 @@
     "username": "Sidhant",
     "password_hash": "$2b$10$VuJufOnjV/TTy5HvcQW8dO.vtmXAIOUVjwomZurLKhgmYBYcY6gde",
     "role": "user",
-    "totalOrders": 3,
-    "orderIds": [
-      1,
-      2,
-      3
-    ]
+    "totalOrders": 0,
+    "orderIds": []
   },
   {
     "id": 4,

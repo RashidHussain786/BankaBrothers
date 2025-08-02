@@ -43,7 +43,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   };
 
   const handleAddToCart = () => {
-    if (!product.stockQuantity || product.stockQuantity <= 0) {
+    if (!product.variant.stockQuantity || product.variant.stockQuantity <= 0) {
       alert('This product is out of stock.');
       return;
     }
@@ -60,7 +60,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
     onClose();
   };
 
-  const isAddToCartDisabled = !product.stockQuantity || product.stockQuantity <= 0 || quantity < 1 || !itemsPerPack.trim();
+  const isAddToCartDisabled = !product.variant.stockQuantity || product.variant.stockQuantity <= 0 || quantity < 1 || !itemsPerPack.trim();
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
@@ -84,7 +84,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Unit Size</label>
-            <p className="mt-1 text-base text-gray-700">{product.unitSize}</p>
+            <p className="mt-1 text-base text-gray-700">{product.variant.unitSize}</p>
           </div>
         </div>
 
@@ -130,7 +130,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
           disabled={isAddToCartDisabled}
           className={`w-full mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${isAddToCartDisabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'}`}
         >
-          {!product.stockQuantity || product.stockQuantity <= 0 ? 'Out of Stock' : 'Add to Cart'}
+          {!product.variant.stockQuantity || product.variant.stockQuantity <= 0 ? 'Out of Stock' : 'Add to Cart'}
         </button>
       </div>
     </div>

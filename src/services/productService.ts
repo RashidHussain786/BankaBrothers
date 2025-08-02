@@ -21,7 +21,18 @@ export const productService = {
       throw new Error(`Failed to fetch products: ${response.statusText}`);
     }
     const data = await response.json();
-    return data;
+    // Parse price for each variant
+    const processedData = {
+      ...data,
+      data: data.data.map((item: any) => ({
+        ...item,
+        variant: {
+          ...item.variant,
+          price: parseFloat(item.variant.price),
+        },
+      })),
+    };
+    return processedData;
   },
 
   async getCompanies(): Promise<string[]> {

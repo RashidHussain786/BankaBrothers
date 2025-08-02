@@ -8,7 +8,7 @@ interface ProductTableProps {
   sortColumn: SortableColumn | null;
   sortDirection: SortDirection;
   onSort: (column: SortableColumn) => void;
-  onOrderClick: (product: Product) => void;
+  onOrderClick: (item: Product) => void;
 }
 
 const ProductTable: React.FC<ProductTableProps> = ({
@@ -19,8 +19,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
   onOrderClick
 }) => {
   const { isAdmin } = useAuth();
-  const getStockStatus = (stockQuantity: number | null | undefined) => {
-    if (stockQuantity === null || stockQuantity === undefined || stockQuantity === 0) {
+  const getStockStatus = (stockQuantity: number) => {
+    if (stockQuantity === 0) {
       return { text: 'Out of Stock', color: 'text-red-600 bg-red-50' };
     } else if (stockQuantity <= 10) {
       return { text: 'Low Stock', color: 'text-amber-600 bg-amber-50' };
@@ -69,37 +69,40 @@ const ProductTable: React.FC<ProductTableProps> = ({
               <SortableHeader column="company">Company</SortableHeader>
               <SortableHeader column="category">Category</SortableHeader>
               <SortableHeader column="unitSize">Unit Size</SortableHeader>
-
+              <SortableHeader column="price">Price</SortableHeader>
               <SortableHeader column="status">Status</SortableHeader>
-              <SortableHeader column="status" className="text-left">
+              <SortableHeader column="stockQuantity" className="text-left">
                 {isAdmin ? 'Stock Quantity' : 'Action'}
               </SortableHeader>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {products.map((product) => {
-              const stockStatus = getStockStatus(product.stockQuantity);
+            {products.map((item) => {
+              const stockStatus = getStockStatus(item.variant.stockQuantity);
               return (
-                <tr key={product.id} className="hover:bg-gray-50 transition-colors duration-150">
+                <tr key={`${item.id}-${item.variant.id}`} className="hover:bg-gray-50 transition-colors duration-150">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div>
                         <div className="text-sm font-medium text-gray-900 max-w-xs truncate">
-                          {product.name}
+                          {item.name}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 font-medium">{product.company}</div>
+                    <div className="text-sm text-gray-900 font-medium">{item.company}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {product.category}
+                      {item.category}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 font-medium">{product.unitSize}</div>
+                    <div className="text-sm text-gray-900 font-medium">{item.variant.unitSize}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900 font-medium">₹{item.variant.price.toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${stockStatus.color}`}>
@@ -110,16 +113,16 @@ const ProductTable: React.FC<ProductTableProps> = ({
                     <div className="flex items-center">
                       {isAdmin ? (
                         <span className="text-sm text-gray-900 font-medium">
-                          {product.stockQuantity} units
+                          {item.variant.stockQuantity} units
                         </span>
                       ) : (
                         <button
-                          className={`px-4 py-2 text-white text-sm font-medium rounded-md transition-colors duration-200 ${product.stockQuantity > 0 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
+                          className={`px-4 py-2 text-white text-sm font-medium rounded-md transition-colors duration-200 ${item.variant.stockQuantity > 0 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
                             }`}
-                          onClick={() => onOrderClick(product)}
-                          disabled={product.stockQuantity === 0}
+                          onClick={() => onOrderClick(item)}
+                          disabled={item.variant.stockQuantity === 0}
                         >
-                          {product.stockQuantity > 0 ? 'Order' : 'Out of Stock'}
+                          {item.variant.stockQuantity > 0 ? 'Order' : 'Out of Stock'}
                         </button>
                       )}
                     </div>
@@ -134,4 +137,4 @@ const ProductTable: React.FC<ProductTableProps> = ({
   );
 };
 
-export default ProductTable;
+export default ProductTable; 

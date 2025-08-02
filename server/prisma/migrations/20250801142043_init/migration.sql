@@ -15,13 +15,19 @@ CREATE TABLE "public"."products" (
     "company" TEXT,
     "category" TEXT,
     "brand" TEXT,
-    "unit_size" TEXT,
-    "items_per_pack" INTEGER,
-    "image" TEXT,
-    "price" DECIMAL(65,30) NOT NULL,
-    "stock_quantity" INTEGER,
 
     CONSTRAINT "products_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."product_variants" (
+    "id" SERIAL NOT NULL,
+    "productId" INTEGER NOT NULL,
+    "unit_size" TEXT NOT NULL,
+    "price" DECIMAL(65,30) NOT NULL,
+    "stock_quantity" INTEGER NOT NULL,
+
+    CONSTRAINT "product_variants_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -53,6 +59,8 @@ CREATE TABLE "public"."order_items" (
     "product_id" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
     "price_at_order" DECIMAL(65,30) NOT NULL,
+    "items_per_pack" TEXT,
+    "special_instructions" TEXT,
 
     CONSTRAINT "order_items_pkey" PRIMARY KEY ("id")
 );
@@ -68,6 +76,9 @@ CREATE UNIQUE INDEX "customers_mobile_key" ON "public"."customers"("mobile");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "customers_shop_name_key" ON "public"."customers"("shop_name");
+
+-- AddForeignKey
+ALTER TABLE "public"."product_variants" ADD CONSTRAINT "product_variants_productId_fkey" FOREIGN KEY ("productId") REFERENCES "public"."products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."orders" ADD CONSTRAINT "orders_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

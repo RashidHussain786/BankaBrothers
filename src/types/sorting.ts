@@ -1,7 +1,7 @@
 
 
 export type SortDirection = 'asc' | 'desc' | null;
-export type SortableColumn = 'name' | 'company' | 'category' | 'unitSize' | 'status';
+export type SortableColumn = 'name' | 'company' | 'category' | 'unitSize' | 'price' | 'stockQuantity' | 'status';
 
 export interface UseSortingReturn {
   sortColumn: SortableColumn | null;

@@ -91,7 +91,7 @@ const CartSummaryPage: React.FC = () => {
       cartItems: cartItems.map(item => ({
         productId: item.id,
         quantity: item.quantity,
-        priceAtOrder: item.price,
+        priceAtOrder: item.variant.price,
         itemsPerPack: item.itemsPerPack,
         specialInstructions: item.specialInstructions,
       })),
@@ -154,7 +154,7 @@ const CartSummaryPage: React.FC = () => {
 
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
-                      <p className="text-sm text-gray-600">{item.company} - {item.unitSize}</p>
+                      <p className="text-sm text-gray-600">{item.company} - {item.variant.unitSize}</p>
                       {item.specialInstructions && <p className="text-sm text-gray-500 italic">Instructions: {item.specialInstructions}</p>}
                       <p className="text-sm text-gray-500">Items per Pack: {item.itemsPerPack}</p>
                     </div>

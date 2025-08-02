@@ -21,8 +21,8 @@ const AddCustomerModal = ({ onClose, onCustomerAdded }: AddCustomerModalProps) =
       await createCustomer({ name, mobile, address, shopName });
       onCustomerAdded();
       onClose();
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
     }
   };
 

@@ -1,3 +1,6 @@
+import { User } from './user';
+import { Product } from './product';
+
 export interface CustomerDetails {
   name: string;
   mobile: string;
@@ -28,7 +31,7 @@ export interface Order {
   customerId: number;
   createdAt: string;
   status: 'pending' | 'completed';
-  user?: any;
+  user?: User;
   customer?: CustomerDetails;
   orderItems?: Array<{
     id: number;
@@ -38,6 +41,6 @@ export interface Order {
     priceAtOrder: number;
     itemsPerPack?: string;
     specialInstructions?: string;
-    product?: any;
+    product?: Product;
   }>;
 }
