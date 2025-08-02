@@ -23,11 +23,7 @@ const CartSummaryPage: React.FC = () => {
   const [orderId, setOrderId] = useState('');
   const [isAddCustomerModalOpen, setIsAddCustomerModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-
-  const fetchCustomers = async () => {
+  const fetchCustomers = React.useCallback(async () => {
     try {
       const { customers: fetchedCustomers } = await getAllCustomers();
       setCustomers(fetchedCustomers);
@@ -38,7 +34,11 @@ const CartSummaryPage: React.FC = () => {
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
-  };
+  }, [searchTerm]); // searchTerm is a dependency for filtering
+
+  useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   useEffect(() => {
     const handler = setTimeout(() => {

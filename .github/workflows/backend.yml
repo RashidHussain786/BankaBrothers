@@ -1,0 +1,38 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "server/**"
+      - "server/package.json"
+      - "server/package-lock.json"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./server
+
+      - name: Run lint
+        run: npm run lint
+        working-directory: ./server
+
+      # Render typically deploys directly from a Git repository (e.g., on push to main).
+      # This workflow ensures CI passes before Render pulls the latest changes.
+      # If you need to trigger a specific Render deploy hook, add it here.
+      - name: Trigger Render Deploy
+        run: |
+          curl "${{ secrets.RENDER_DEPLOY_HOOK }}"

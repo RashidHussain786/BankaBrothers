@@ -24,11 +24,11 @@ export const productService = {
     // Parse price for each variant
     const processedData = {
       ...data,
-      data: data.data.map((item: any) => ({
+      data: data.data.map((item: Product) => ({
         ...item,
         variant: {
           ...item.variant,
-          price: parseFloat(item.variant.price),
+          price: item.variant.price,
         },
       })),
     };
