@@ -28,6 +28,8 @@ app.use(
   })
 );
 
+app.use(express.json());
+
 // Use API routes
 app.use('/api/products', productRoutes);
 app.use('/api/order', orderRoutes);
