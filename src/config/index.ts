@@ -5,7 +5,7 @@ const config = {
         API_BASE_URL: 'http://localhost:3001/api'
     },
     production: {
-        API_BASE_URL: '/api' // This will use the relative path in production
+        API_BASE_URL: 'https://bankabrothers.onrender.com/api' // This will use the relative path in production
     }
 } as const;
 
