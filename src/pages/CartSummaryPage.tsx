@@ -15,6 +15,7 @@ const CartSummaryPage: React.FC = () => {
 
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
   const [selectedCustomerDetails, setSelectedCustomerDetails] = useState<Customer | null>(null);
@@ -30,37 +31,52 @@ const CartSummaryPage: React.FC = () => {
     try {
       const { customers: fetchedCustomers } = await getAllCustomers();
       setCustomers(fetchedCustomers);
-      setFilteredCustomers(fetchedCustomers); // Initialize filtered customers with all customers
+      // Initialize filtered customers with all customers only if no search term is active
+      if (!searchTerm) {
+        setFilteredCustomers(fetchedCustomers);
+      }
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const term = e.target.value;
-    setSearchTerm(term);
-    if (term.length > 0) {
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (debouncedSearchTerm.length > 0) {
       setFilteredCustomers(
         customers.filter(
           (customer) =>
-            customer.shopName?.toLowerCase().includes(term.toLowerCase()) ||
-            customer.name.toLowerCase().includes(term.toLowerCase())
+            customer.shopName?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+            customer.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
         )
       );
     } else {
       setFilteredCustomers(customers);
     }
+  }, [debouncedSearchTerm, customers]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   const handleCustomerSelect = (customer: Customer) => {
     setSelectedCustomerId(customer.id);
     setSelectedCustomerDetails(customer);
-    setSearchTerm(customer.shopName || customer.name); // Display selected customer's name in search box
-    setFilteredCustomers([]); // Clear filtered results
+    setSearchTerm(customer.shopName || customer.name);
+    setFilteredCustomers([]);
   };
 
   const handleAddCustomerSuccess = () => {
-    fetchCustomers(); // Re-fetch customers after a new one is added
+    fetchCustomers();
     setIsAddCustomerModalOpen(false);
   };
 

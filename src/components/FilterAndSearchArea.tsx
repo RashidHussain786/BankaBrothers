@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, X, ChevronDown } from 'lucide-react';
 
 interface FilterAndSearchAreaProps {
@@ -42,6 +42,21 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
   showMobileFilters,
   onToggleMobileFilters
 }) => {
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      onSearchChange(localSearchTerm);
+    }, 500); // 500ms debounce time
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [localSearchTerm, onSearchChange]);
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
@@ -60,8 +75,8 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
               <input
                 type="text"
                 placeholder="Search products or companies..."
-                value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)}
+                value={localSearchTerm}
+                onChange={(e) => setLocalSearchTerm(e.target.value)}
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               />
             </div>
@@ -194,8 +209,8 @@ const FilterAndSearchArea: React.FC<FilterAndSearchAreaProps> = ({
               <input
                 type="text"
                 placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)}
+                value={localSearchTerm}
+                onChange={(e) => setLocalSearchTerm(e.target.value)}
                 className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               />
             </div>

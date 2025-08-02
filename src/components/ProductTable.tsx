@@ -1,7 +1,11 @@
-import React from 'react';
-import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronUp, ChevronDown, ChevronsUpDown, PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { SortableColumn, SortDirection, Product } from '../types';
 import { useAuth } from '../context/AuthContext';
+import AddProductModal from './AddProductModal';
+import EditProductModal from './EditProductModal';
+import DeleteProductModal from './DeleteProductModal';
+import { useProducts } from '../hooks/useProducts';
 
 interface ProductTableProps {
   products: Product[];
@@ -11,14 +15,28 @@ interface ProductTableProps {
   onOrderClick: (item: Product) => void;
 }
 
-const ProductTable: React.FC<ProductTableProps> = ({
-  products,
-  sortColumn,
-  sortDirection,
-  onSort,
-  onOrderClick
-}) => {
+const ProductTable: React.FC<ProductTableProps> = ({ products, sortColumn, sortDirection, onSort, onOrderClick }) => {
   const { isAdmin } = useAuth();
+  const { addProduct, updateProduct, deleteProduct } = useProducts({});
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const handleAddClick = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleEditClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsDeleteModalOpen(true);
+  };
+
   const getStockStatus = (stockQuantity: number) => {
     if (stockQuantity === 0) {
       return { text: 'Out of Stock', color: 'text-red-600 bg-red-50' };
@@ -61,6 +79,17 @@ const ProductTable: React.FC<ProductTableProps> = ({
 
   return (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+      {isAdmin && (
+        <div className="p-4">
+          <button
+            onClick={handleAddClick}
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700"
+          >
+            <PlusCircle className="h-5 w-5 mr-2" />
+            Add Product
+          </button>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -74,6 +103,9 @@ const ProductTable: React.FC<ProductTableProps> = ({
               <SortableHeader column="stockQuantity" className="text-left">
                 {isAdmin ? 'Stock Quantity' : 'Action'}
               </SortableHeader>
+              {isAdmin && (
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -127,14 +159,60 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       )}
                     </div>
                   </td>
+                  {isAdmin && (
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-3">
+                        <button
+                          onClick={() => handleEditClick(item)}
+                          className="p-1 text-blue-600 hover:text-blue-800 transition-colors"
+                        >
+                          <Edit className="h-5 w-5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(item)}
+                          className="p-1 text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
+      {isAddModalOpen && (
+        <AddProductModal
+          onClose={() => setIsAddModalOpen(false)}
+          onSave={(product) => {
+            addProduct(product);
+            setIsAddModalOpen(false);
+          }}
+        />
+      )}
+      {isEditModalOpen && selectedProduct && (
+        <EditProductModal
+          product={selectedProduct}
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={(product) => {
+            updateProduct(product);
+            setIsEditModalOpen(false);
+          }}
+        />
+      )}
+      {isDeleteModalOpen && selectedProduct && (
+        <DeleteProductModal
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={() => {
+            deleteProduct(selectedProduct.id);
+            setIsDeleteModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 };
 
-export default ProductTable; 
+export default ProductTable;

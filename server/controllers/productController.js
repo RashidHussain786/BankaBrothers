@@ -79,3 +79,30 @@ exports.getProductsByStockStatus = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch products by stock status' });
   }
 };
+
+exports.addProduct = async (req, res) => {
+  try {
+    const product = await productService.addProduct(req.body);
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateProduct = async (req, res) => {
+  try {
+    const product = await productService.updateProduct(req.params.id, req.body);
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteProduct = async (req, res) => {
+  try {
+    await productService.deleteProduct(req.params.id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

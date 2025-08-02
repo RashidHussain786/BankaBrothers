@@ -6,6 +6,7 @@ import EditCustomerModal from '../components/EditCustomerModal';
 import Pagination from '../components/Pagination';
 import ItemsPerPageSelector from '../components/ItemsPerPageSelector';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Edit, Trash2 } from 'lucide-react';
 
 const CustomerManagementPage = () => {
   const queryClient = useQueryClient();
@@ -114,18 +115,20 @@ const CustomerManagementPage = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.address}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.mobile}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button
-                    onClick={() => handleEditCustomer(customer)}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteCustomer(customer.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex items-center space-x-3 justify-end">
+                    <button
+                      onClick={() => handleEditCustomer(customer)}
+                      className="p-1 text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      <Edit className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCustomer(customer.id)}
+                      className="p-1 text-red-600 hover:text-red-800 transition-colors"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

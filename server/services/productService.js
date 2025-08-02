@@ -131,7 +131,9 @@ exports.findProducts = async (params) => {
   const orderBy = {};
   if (sortColumn && sortDirection) {
     // Sort by variant fields if applicable, otherwise by product fields
-    if (['unitSize', 'price', 'stockQuantity'].includes(sortColumn)) {
+    if (sortColumn === 'status') {
+      orderBy.stockQuantity = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else if (['unitSize', 'price', 'stockQuantity'].includes(sortColumn)) {
       orderBy[sortColumn] = sortDirection;
     } else if (['name', 'company', 'category', 'brand'].includes(sortColumn)) {
       orderBy.product = { [sortColumn]: sortDirection };
@@ -278,4 +280,59 @@ exports.filterProductsByStockStatus = async (status) => {
   });
 
   return Array.from(productsMap.values());
+};
+
+exports.addProduct = async (productData) => {
+  const { name, company, category, unit, variant } = productData;
+  const newProduct = await prisma.product.create({
+    data: {
+      name,
+      company,
+      category,
+      unit,
+      variants: {
+        create: {
+          unitSize: variant.unitSize,
+          price: variant.price,
+          stockQuantity: variant.stockQuantity,
+        },
+      },
+    },
+    include: {
+      variants: true,
+    },
+  });
+  return newProduct;
+};
+
+exports.updateProduct = async (productId, productData) => {
+  const { name, company, category, unit, variant } = productData;
+  const updatedProduct = await prisma.product.update({
+    where: { id: parseInt(productId) },
+    data: {
+      name,
+      company,
+      category,
+      unit,
+      variants: {
+        update: {
+          where: { id: variant.id },
+          data: {
+            unitSize: variant.unitSize,
+            price: variant.price,
+            stockQuantity: variant.stockQuantity,
+          },
+        },
+      },
+    },
+    include: {
+      variants: true,
+    },
+  });
+  return updatedProduct;
+};
+
+exports.deleteProduct = async (productId) => {
+  await prisma.productVariant.deleteMany({ where: { productId: parseInt(productId) } });
+  await prisma.product.delete({ where: { id: parseInt(productId) } });
 };

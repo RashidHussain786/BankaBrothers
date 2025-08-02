@@ -1,4 +1,4 @@
-import { ProductQueryParams, ProductServiceResponse } from '../types';
+import { Product, ProductQueryParams, ProductServiceResponse } from '../types';
 
 import { API_BASE_URL } from '../config';
 
@@ -74,5 +74,41 @@ export const productService = {
       throw new Error(`Failed to fetch sizes: ${response.statusText}`);
     }
     return response.json();
+  },
+  async addProduct(product: Omit<Product, 'id' | 'variant'> & { variant: Omit<Product['variant'], 'id' | 'productId'> }): Promise<Product> {
+    const response = await fetch(`${API_BASE_URL}/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to add product: ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  async updateProduct(product: Product): Promise<Product> {
+    const response = await fetch(`${API_BASE_URL}/products/${product.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to update product: ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  async deleteProduct(productId: number): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to delete product: ${response.statusText}`);
+    }
   },
 };

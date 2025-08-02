@@ -97,11 +97,11 @@ const AdminOrderManagementPage: React.FC = () => {
           Total Orders ({totalCount})
         </h2>
         <div className="flex items-center space-x-4">
-        <ItemsPerPageSelector
-          itemsPerPage={itemsPerPage}
-          onItemsPerPageChange={setItemsPerPage}
-        />
-        <ColumnSelector
+          <ItemsPerPageSelector
+            itemsPerPage={itemsPerPage}
+            onItemsPerPageChange={setItemsPerPage}
+          />
+          <ColumnSelector
             columns={allColumns}
             selectedColumns={selectedColumns}
             onColumnChange={setSelectedColumns}
@@ -114,9 +114,9 @@ const AdminOrderManagementPage: React.FC = () => {
             <thead className="bg-gray-50">
               <tr>
                 {allColumns.filter(c => selectedColumns.includes(c.key)).map(column => (
-                    <th key={column.key} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        {column.label}
-                    </th>
+                  <th key={column.key} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {column.label}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -128,7 +128,7 @@ const AdminOrderManagementPage: React.FC = () => {
               }).map((order) => (
                 <tr key={order.orderId}>
                   {allColumns.filter(c => selectedColumns.includes(c.key)).map(column => (
-                    <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-top">
                       {column.key === 'shopName' && order.customer?.shopName}
                       {column.key === 'orderId' && order.orderId}
                       {column.key === 'customerName' && order.customer?.name}

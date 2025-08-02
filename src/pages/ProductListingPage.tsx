@@ -15,6 +15,7 @@ import { Product, ProductQueryParams } from '../types';
 import { useCart } from '../hooks/useCart';
 import { useQueryClient } from '@tanstack/react-query';
 import { productService } from '../services/productService';
+import { useAuth } from '../context/AuthContext';
 
 const ProductListingPage = () => {
   const {
@@ -37,7 +38,8 @@ const ProductListingPage = () => {
     brands,
     sizes
   } = useProductFilters();
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const { isAdmin } = useAuth();
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>(isAdmin ? 'table' : 'grid');
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);

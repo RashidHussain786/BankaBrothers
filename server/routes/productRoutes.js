@@ -9,5 +9,8 @@ router.get('/sizes', productController.getSizes);
 router.get('/stock-status', productController.getProductsByStockStatus);
 router.get('/:id', productController.getProductById);
 router.get('/', productController.getAllProducts);
+router.post('/', productController.addProduct);
+router.put('/:id', productController.updateProduct);
+router.delete('/:id', productController.deleteProduct);
 
 module.exports = router;
