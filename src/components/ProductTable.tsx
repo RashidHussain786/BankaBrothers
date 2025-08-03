@@ -17,7 +17,7 @@ interface ProductTableProps {
 
 const ProductTable: React.FC<ProductTableProps> = ({ products, sortColumn, sortDirection, onSort, onOrderClick }) => {
   const { isAdmin } = useAuth();
-  const { addProduct, updateProduct, deleteProduct } = useProducts({});
+  const { addProduct, updateProduct, deleteProduct } = useProducts({}, { enabled: false });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

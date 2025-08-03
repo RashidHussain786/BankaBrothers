@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { productService } from '../services/productService';
 import { ProductQueryParams } from '../types';
 
-export const useProducts = (params: ProductQueryParams) => {
+export const useProducts = (params: ProductQueryParams, { enabled = true }: { enabled?: boolean } = {}) => {
   const queryClient = useQueryClient();
 
   // Fetch Products
@@ -10,6 +10,7 @@ export const useProducts = (params: ProductQueryParams) => {
     queryKey: ['products', params],
     queryFn: () => productService.getProducts(params),
     placeholderData: (previousData) => previousData,
+    enabled,
   });
 
   // Add Product

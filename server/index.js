@@ -17,13 +17,13 @@ const PORT = 3001;
 const allowedOrigin =
   process.env.NODE_ENV === 'production'
     ? 'https://bankabrothers.netlify.app'
-    : process.env.CORS_ORIGIN || 'http://localhost:3000';
+    : process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 app.use(
   cors({
     origin: allowedOrigin,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
     credentials: true,
   })
 );
@@ -35,7 +35,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/admin', importRoutes);
+app.use('/api/import', importRoutes);
 app.use('/api/customers', customerRoutes);
 
 app.get('/', (req, res) => {

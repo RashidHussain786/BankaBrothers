@@ -103,7 +103,7 @@ export const adminService = {
     importProducts: async (file: File, token: string): Promise<string> => {
         const formData = new FormData();
         formData.append('file', file);
-        const response = await fetch(`${API_BASE_URL}/admin/products/import`, {
+        const response = await fetch(`${API_BASE_URL}/import/products/import`, {
             method: 'POST',
             headers: {
                 'x-auth-token': token,
