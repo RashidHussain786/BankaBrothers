@@ -1,13 +1,13 @@
-import Header from './components/Header';
+import Header from './features/shared/components/Header';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import CartSummaryPage from './pages/CartSummaryPage';
-import ProductListingPage from './pages/ProductListingPage';
-import LoginPage from './pages/LoginPage';
-import AdminCreateUserPage from './pages/AdminCreateUserPage';
-import AdminUserManagementPage from './pages/AdminUserManagementPage';
-import AdminOrderManagementPage from './pages/AdminOrderManagementPage';
-import CustomerManagementPage from './pages/CustomerManagementPage';
-import { useAuth } from './context/AuthContext';
+import CartSummaryPage from './features/cart/pages/CartSummaryPage';
+import ProductListingPage from './features/products/pages/ProductListingPage';
+import LoginPage from './features/auth/pages/LoginPage';
+import AdminCreateUserPage from './features/users/pages/AdminCreateUserPage';
+import AdminUserManagementPage from './features/users/pages/AdminUserManagementPage';
+import AdminOrderManagementPage from './features/orders/pages/AdminOrderManagementPage';
+import CustomerManagementPage from './features/customers/pages/CustomerManagementPage';
+import { useAuth } from './features/auth';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
