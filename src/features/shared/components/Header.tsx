@@ -80,6 +80,12 @@ const Header: React.FC = () => {
                 >
                   Manage Customers
                 </Link>
+                <Link
+                  to="/admin/analytics"
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  Analytics Dashboard
+                </Link>
               </>
             )}
             <CartIcon />
@@ -156,6 +162,13 @@ const Header: React.FC = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Manage Customers
+              </Link>
+              <Link
+                to="/admin/analytics"
+                className="block px-4 py-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Analytics Dashboard
               </Link>
             </>
           )}

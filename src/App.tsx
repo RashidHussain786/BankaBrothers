@@ -7,6 +7,7 @@ import AdminCreateUserPage from './features/users/pages/AdminCreateUserPage';
 import AdminUserManagementPage from './features/users/pages/AdminUserManagementPage';
 import AdminOrderManagementPage from './features/orders/pages/AdminOrderManagementPage';
 import CustomerManagementPage from './features/customers/pages/CustomerManagementPage';
+import AnalyticsDashboardPage from './features/analytics/pages/AnalyticsDashboardPage';
 import { useAuth } from './features/auth';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/admin/user-management" element={<PrivateRoute><AdminUserManagementPage /></PrivateRoute>} />
         <Route path="/admin/order-management" element={<PrivateRoute><AdminOrderManagementPage /></PrivateRoute>} />
         <Route path="/admin/customer-management" element={<PrivateRoute><CustomerManagementPage /></PrivateRoute>} />
+        <Route path="/admin/analytics" element={<PrivateRoute><AnalyticsDashboardPage /></PrivateRoute>} />
       </Routes>
 
       {/* Footer */}
