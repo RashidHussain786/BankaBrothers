@@ -36,7 +36,10 @@ app.use('/api/order', orderRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/import', importRoutes);
+const analyticsRoutes = require('./routes/analyticsRoutes');
+
 app.use('/api/customers', customerRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 app.get('/', (req, res) => {
   res.send('Banka Brother Backend is running!');
